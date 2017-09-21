@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="EcmSystemSettingMapper" >
+
+   
+  <!--  更新分润比例配置  -->
+  <update id="updatesystemsetting" parameterType="EcmSystemSetting">
+    update ecm_system_setting
+    set value = #{value},
+        state = #{state}
+    where scode = #{scode}
+  </update>
+  
+   
+  <!-- 根据scode查询分润比例 -->
+  <select id="querysystemsetting" parameterType="EcmSystemSetting" resultType="EcmSystemSetting">
+    select ecm.sid,ecm.scode,ecm.value,ecm.state,ecm.desc
+    	from ecm_system_setting ecm
+    where ecm.scode = #{scode,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <!-- 分润比例配置列表  -->
+  <select id="listsystemsetting" parameterType="EcmSystemSetting" resultType="EcmSystemSetting">
+     select ecm.sid,ecm.scode,ecm.value,ecm.state,ecm.desc
+    	from ecm_system_setting ecm
+    	where 1 = 1
+    	<if test="scode != null">
+    	  and ecm.scode = #{scode}
+    	</if>
+    	<if test="state != null">
+    	  and ecm.state = #{state}
+    	</if>
+  </select>
+  
+  
+   
+</mapper>

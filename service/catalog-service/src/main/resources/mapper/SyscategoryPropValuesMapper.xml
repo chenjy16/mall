@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="SyscategoryPropValuesMapper" >
+  <resultMap id="BaseResultMap" type="com.meiduimall.service.catalog.entity.SyscategoryPropValues" >
+    <id column="prop_value_id" property="propValueId" jdbcType="INTEGER" />
+    <result column="prop_id" property="propId" jdbcType="INTEGER" />
+    <result column="prop_value" property="propValue" jdbcType="VARCHAR" />
+    <result column="prop_image" property="propImage" jdbcType="VARCHAR" />
+    <result column="order_sort" property="orderSort" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  
+  <sql id="Base_Column_List" >
+    prop_value_id, prop_id, prop_value, prop_image, order_sort
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    * 
+    from syscategory_prop_values
+    where prop_value_id = #{propValueId,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from syscategory_prop_values
+    where prop_value_id = #{propValueId,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.meiduimall.service.catalog.entity.SyscategoryPropValues" >
+    insert into syscategory_prop_values (prop_value_id, prop_id, prop_value, 
+      prop_image, order_sort)
+    values (#{propValueId,jdbcType=INTEGER}, #{propId,jdbcType=INTEGER}, #{propValue,jdbcType=VARCHAR}, 
+      #{propImage,jdbcType=VARCHAR}, #{orderSort,jdbcType=INTEGER})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.meiduimall.service.catalog.entity.SyscategoryPropValues" >
+    insert into syscategory_prop_values
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="propValueId != null" >
+        prop_value_id,
+      </if>
+      <if test="propId != null" >
+        prop_id,
+      </if>
+      <if test="propValue != null" >
+        prop_value,
+      </if>
+      <if test="propImage != null" >
+        prop_image,
+      </if>
+      <if test="orderSort != null" >
+        order_sort,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="propValueId != null" >
+        #{propValueId,jdbcType=INTEGER},
+      </if>
+      <if test="propId != null" >
+        #{propId,jdbcType=INTEGER},
+      </if>
+      <if test="propValue != null" >
+        #{propValue,jdbcType=VARCHAR},
+      </if>
+      <if test="propImage != null" >
+        #{propImage,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSort != null" >
+        #{orderSort,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.meiduimall.service.catalog.entity.SyscategoryPropValues" >
+    update syscategory_prop_values
+    <set >
+      <if test="propId != null" >
+        prop_id = #{propId,jdbcType=INTEGER},
+      </if>
+      <if test="propValue != null" >
+        prop_value = #{propValue,jdbcType=VARCHAR},
+      </if>
+      <if test="propImage != null" >
+        prop_image = #{propImage,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSort != null" >
+        order_sort = #{orderSort,jdbcType=INTEGER},
+      </if>
+    </set>
+    where prop_value_id = #{propValueId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.meiduimall.service.catalog.entity.SyscategoryPropValues" >
+    update syscategory_prop_values
+    set prop_id = #{propId,jdbcType=INTEGER},
+      prop_value = #{propValue,jdbcType=VARCHAR},
+      prop_image = #{propImage,jdbcType=VARCHAR},
+      order_sort = #{orderSort,jdbcType=INTEGER}
+    where prop_value_id = #{propValueId,jdbcType=INTEGER}
+  </update>
+</mapper>

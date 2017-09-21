@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="paymentNotify">
+
+    <!-- 添加回调数据 -->
+    <insert id="insert" parameterType="com.meiduimall.payment.api.model.api.PaymentNotifyModel">
+
+        INSERT INTO t_payment_notify
+
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">
+                order_id,
+            </if>
+            <if test="notifyTime != null">
+                notify_time,
+            </if>
+            <if test="notifyData != null">
+                notify_data,
+            </if>
+            <if test="notifyStatus != null">
+                notify_status,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">
+                #{orderId, jdbcType=VARCHAR},
+            </if>
+            <if test="notifyTime != null">
+                #{notifyTime, jdbcType=TIMESTAMP},
+            </if>
+            <if test="notifyData != null">
+                #{notifyData, jdbcType=LONGVARCHAR},
+            </if>
+            <if test="notifyStatus != null">
+                #{notifyStatus, jdbcType=INTEGER},
+            </if>
+        </trim>
+
+    </insert>
+
+ 
+
+
+</mapper>

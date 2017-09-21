@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EcmMzfAgentWaterMapper">
+
+	<!-- 新增保证金分润流水（金额或积分） -->
+	<insert id="insertAgentWater" parameterType="EcmMzfAgentWater" >
+		INSERT INTO ecm_mzf_agent_water (
+		  agent_id,
+		  agent_water_id,
+		  code,
+		  money,
+		  agent_water_time,
+		  score,
+		  phone,
+		  type,
+		  agent_rate,
+		  rec_no
+		) 
+		VALUES
+		  ( 
+		    #{agentId},
+		  	#{agentWaterId},
+		  	#{code},
+		  	#{money},
+		  	#{agentWaterTime},
+		  	#{score},
+		  	#{phone},
+		  	#{type},
+		  	#{agentRate},
+		  	#{recNo}
+		  )
+	</insert>
+	
+	<!-- 修改积分状态为已更新 -->
+	<update id="updateScoreStatusByCode" parameterType="java.util.Map">
+		UPDATE 
+		  ecm_mzf_agent_water 
+		SET
+		  score_status = 1 
+		WHERE agent_id = #{id} AND code = #{code} AND score = #{score}
+	</update>
+	
+	<!-- 根据代理编号查询分润记录 -->
+	<select id="findAgentWaterByCode" parameterType="java.lang.String">
+		SELECT 
+		  agent_water_id agentWaterId,
+		  code,
+		  money,
+		  agentWaterTime,
+		  score,
+		  score_status scoreStatus,
+		  phone,
+		  TYPE,
+		  agent_rate agentRate 
+		FROM
+		  ecm_mzf_agent_water 
+		WHERE code = #{code} 
+	</select>
+	
+	<!-- 根据代理表中的code 获取代理流水 -->
+	<select id="findAgentWaterByAgentCode" resultType="EcmMzfAgentWater" parameterType="java.lang.Integer">
+		  SELECT 
+			  b.id,
+			  b.agent_id agentId,
+			  b.agent_water_id agentWaterId,
+			  b.code,
+			  b.money,
+			  b.agent_water_time agentWaterTime,
+			  b.score,
+			  b.score_status scoreStatus,
+			  b.phone,
+			  b.type,
+			  b.agent_rate agentRate 
+			FROM
+			  ecm_mzf_agent_water b 
+			WHERE b.score = 0 AND b.agent_id = #{id}
+	</select>
+	
+	<!-- 获取积分未更新到会员系统的数据 -->
+	<select id="getAgentWaterScore" resultType="EcmMzfAgentWater">
+		SELECT 
+		  b.id,
+		  b.agent_id agentId,
+		  b.agent_water_id agentWaterId,
+		  b.code,
+		  b.money,
+		  b.agent_water_time agentWaterTime,
+		  b.score,
+		  b.score_status scoreStatus,
+		  b.phone,
+		  b.type,
+		  b.agent_rate agentRate 
+		FROM
+		  ecm_mzf_agent_water b 
+		WHERE b.score != 0 
+		  AND b.score_status = 0 
+	</select>
+	
+	<!-- 获取分润结果 用于判断当前个代是否重新分润 -->
+	<select id="getShareProfitResult" parameterType="java.util.Map" resultType="EcmMzfAgentWater">
+		SELECT 
+		  a.* 
+		FROM
+		  ecm_mzf_agent_water a 
+		  LEFT JOIN ecm_mzf_water b 
+		    ON a.agent_water_id = b.ext_id 
+		WHERE a.agent_id = #{id} 
+		  AND a.rec_no = #{recNo}
+	</select>
+
+</mapper>

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EcmMzfWaterMapper">
+
+	<!-- 新增保证金分润流水 -->
+	<insert id="insertWater" parameterType="EcmMzfWater">
+		INSERT INTO ecm_mzf_water (
+		  water_id,
+		  code,
+		  money,
+		  remark,
+		  op_time,
+		  water_type,
+		  balance,
+		  ext_id
+		) 
+		VALUES
+		  (
+		    #{waterId},	
+		    #{code},
+		    #{money},
+		    #{remark},
+		    #{opTime},
+		    #{waterType},
+		    #{balance},
+		    #{extId}
+		  )
+	</insert>
+	
+
+	<select id="getBilledWatersToMerge" resultType="com.meiduimall.service.settlement.vo.BilledWaterVO2Merge"><!-- 查询所有，不用当天，这样即使出错了，事务回滚了，下午定时任务运行时也可以继续何必数据 -->
+ 		  SELECT MAX(w.id) AS idDel,MIN(w.id) AS idKeep,w.code FROM ecm_mzf_water w WHERE w.`water_type`=2 GROUP BY w.code,w.op_time,w.water_type HAVING COUNT(w.id)>1
+	</select>
+	
+	<select id="getWatersByIds" resultType="EcmMzfWater">
+ 		  SELECT * FROM ecm_mzf_water WHERE id in  
+ 		  <foreach item="id" index="index" collection="ids" open="(" separator="," close=")">  
+			  #{id}  
+		</foreach>
+	</select>
+	
+	<delete id="delWatersByIds">
+		delete FROM ecm_mzf_water WHERE id in 
+		 <foreach item="id" index="index" collection="ids" open="(" separator="," close=")">  
+			  #{id}  
+		</foreach>
+	</delete>
+	
+	<update id="updateMoneybyId" parameterType="EcmMzfWater">
+		UPDATE ecm_mzf_water w SET w.money=#{money} where w.id=#{id}
+	</update>
+	
+	<delete id="deleteZeroAmountWaters">
+		  DELETE FROM ecm_mzf_water WHERE money=0
+	</delete>
+	
+	<select id="getZeroAmountWaters" resultType="EcmMzfWater">
+		 SELECT * FROM ecm_mzf_water WHERE money=0
+	</select>
+	
+	<!-- 获取流水列表 -->
+	<select id="getWaterList" parameterType="java.util.Map" resultType="EcmMzfWater">
+		SELECT 
+		  a.id,
+		  a.water_id waterId,
+		  a.code,
+		  a.money,
+		  a.remark,
+		  a.op_time opTime,
+		  a.water_type waterType,
+		  a.ext_id extId,
+		  b.rec_no recNo,
+		  a.balance 
+		FROM
+		  ecm_mzf_water a 
+		  LEFT JOIN ecm_mzf_agent_water b 
+		    ON a.ext_id = b.agent_water_id 
+		WHERE 1 = 1 
+		<if test="waterId != null and waterId != ''">
+			AND a.water_id = #{waterId}
+		</if>
+		
+		<if test="code != null and code != ''">
+			AND a.code = #{code}
+		</if>
+		
+		<if test="_parameter.containsKey('waterType')">
+			AND a.water_type in 
+			<foreach collection="waterType" index="index" item="item" open="(" separator="," close=")">
+                #{item}       
+        	</foreach>
+		</if>
+		
+		<if test="opTimeStart != null and opTimeStart != ''">
+			AND a.op_time &gt;= #{opTimeStart}
+		</if>
+		
+		<if test="opTimeEnd != null and opTimeEnd != ''">
+			AND a.op_time &lt;= #{opTimeEnd}
+		</if>
+		
+		<if test="opTimeStart != null and opTimeEnd != null">
+			AND #{opTimeStart} &gt;= a.op_time &lt;= #{opTimeEnd}
+		</if>
+		ORDER BY a.op_time DESC
+	</select>
+	
+	<!-- 获取流水总数 -->
+	<select id="getWaterCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT 
+		  COUNT(*) 
+		FROM
+		  ecm_mzf_water
+		  WHERE 1 = 1 
+		<if test="waterId != null and waterId != ''">
+			AND water_id = #{waterId}
+		</if>
+		
+		<if test="code != null and code != ''">
+			AND code = #{code}
+		</if>
+		
+		<if test="_parameter.containsKey('waterType')">
+			AND water_type in
+			<foreach collection="waterType" index="index" item="item" open="(" separator="," close=")">
+                #{item}       
+        	</foreach>
+		</if>
+		
+		<if test="opTimeStart != null and opTimeStart != ''">
+			AND op_time &gt;= #{opTimeStart}
+		</if>
+		
+		<if test="opTimeEnd != null and opTimeEnd != ''">
+			AND op_time &lt;= #{opTimeEnd}
+		</if>
+		
+		<if test="opTimeStart != null and opTimeEnd != null">
+			AND #{opTimeStart} &gt;= op_time &lt;= #{opTimeEnd}
+		</if>
+	</select>
+	
+	<!-- 根据流水编号获取流水详情 -->
+	<select id="getWaterDetailByWaterId" parameterType="java.util.Map" resultType="EcmMzfWater">
+		SELECT 
+		  a.id,
+		  a.water_id waterId,
+		  a.code,
+		  a.money,
+		  a.remark,
+		  a.op_time opTime,
+		  a.water_type waterType,
+		  a.ext_id extId,
+		  b.rec_no recNo
+		FROM
+		  ecm_mzf_water a LEFT JOIN ecm_mzf_agent_water b 
+		    ON a.ext_id = b.agent_water_id
+		  WHERE a.water_id = #{waterId} and a.water_type = #{waterType}
+	</select>
+	
+	<select id="getShareProfitByWaterId"  resultType="EcmMzfShareProfit">
+		select w.`water_id` as waterId,sf.`order_sn` as orderSn,sf.`outarea` as outArea,sf.`person_agent_profit` as personAgentProfit,sf.`area_agent_profit` as areaAgentProfit,sf.`outarea_agent_profit` as outareaAgentProfit,sf.`seller_profit` as sellerProfit,os.`status_desc` as statusDesc 
+		from ecm_mzf_order_status os,ecm_mzf_shareprofit sf ,`ecm_mzf_water` w,ecm_mzf_bill_water_order wo 
+		where os.`order_sn`=sf.`order_sn` and  sf.`order_sn`=wo.`order_sn` and wo.`bill_id`=w.`ext_id` and w.`water_id`=#{waterId}
+	</select>
+	
+	<select id="getShareProfitCountByWaterId"  resultType="java.lang.Integer">
+		SELECT COUNT(sf.`order_sn`) 
+		FROM ecm_mzf_shareprofit sf ,`ecm_mzf_water` w,ecm_mzf_bill_water_order wo 
+		WHERE  sf.`order_sn`=wo.`order_sn` AND wo.`bill_id`=w.`ext_id` AND w.`water_id`=#{waterId};
+	</select>
+	
+	<!-- 根据推荐人编号获取推荐人所获得的推荐费 -->
+	<select id="getRecommenderMoney" parameterType="java.util.Map" resultType="java.lang.String">
+		SELECT SUM(money) FROM ecm_mzf_agent_water WHERE rec_no = #{recNo} and code = #{code}
+	</select>
+	
+	<!-- 根据提现编号，获取提现流水信息 -->
+	<select id="getDrawWaterInfo" parameterType="java.lang.String" resultType="EcmMzfDrawWater">
+		SELECT 
+		  draw_code drawCode,
+		  code,
+		  status,
+		  money,
+		  remark,
+		  draw_time drawTime 
+		FROM
+		  ecm_mzf_draw_water 
+		WHERE draw_code = #{drawCode}
+	</select>
+	
+	<!-- 此sql目的是根据code、waterType、nowTime生成流水id -->
+	<select id="getCountCreateWaterId" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT 
+		  COUNT(*) 
+		FROM
+		  ecm_mzf_water a 
+		WHERE DATE_FORMAT(a.op_time, '%Y-%m-%d') = #{nowTime} 
+		  AND code = #{code} 
+		  AND water_type = #{waterType} 
+	</select>
+	
+</mapper>

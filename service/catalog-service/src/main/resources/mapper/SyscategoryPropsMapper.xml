@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="SyscategoryPropsMapper" >
+  
+  <resultMap id="BaseResultMap" type="com.meiduimall.service.catalog.entity.SyscategoryProps" >
+    <id column="prop_id" property="propId" jdbcType="INTEGER" />
+    <result column="prop_name" property="propName" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="search" property="search" jdbcType="VARCHAR" />
+    <result column="show" property="show" jdbcType="VARCHAR" />
+    <result column="is_def" property="isDef" jdbcType="INTEGER" />
+    <result column="show_type" property="showType" jdbcType="VARCHAR" />
+    <result column="prop_type" property="propType" jdbcType="VARCHAR" />
+    <result column="prop_memo" property="propMemo" jdbcType="VARCHAR" />
+    <result column="order_sort" property="orderSort" jdbcType="INTEGER" />
+    <result column="modified_time" property="modifiedTime" jdbcType="INTEGER" />
+    <result column="disabled" property="disabled" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  
+  <sql id="Base_Column_List" >
+    prop_id, prop_name, type, search, show, is_def, show_type, prop_type, prop_memo, 
+    order_sort, modified_time, disabled
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    * 
+    from syscategory_props
+    where prop_id = #{propId,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from syscategory_props
+    where prop_id = #{propId,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.meiduimall.service.catalog.entity.SyscategoryProps" >
+    insert into syscategory_props (prop_id, prop_name, type, 
+      search, show, is_def, show_type, 
+      prop_type, prop_memo, order_sort, 
+      modified_time, disabled)
+    values (#{propId,jdbcType=INTEGER}, #{propName,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{search,jdbcType=VARCHAR}, #{show,jdbcType=VARCHAR}, #{isDef,jdbcType=INTEGER}, #{showType,jdbcType=VARCHAR}, 
+      #{propType,jdbcType=VARCHAR}, #{propMemo,jdbcType=VARCHAR}, #{orderSort,jdbcType=INTEGER}, 
+      #{modifiedTime,jdbcType=INTEGER}, #{disabled,jdbcType=INTEGER})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.meiduimall.service.catalog.entity.SyscategoryProps" >
+    insert into syscategory_props
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="propId != null" >
+        prop_id,
+      </if>
+      <if test="propName != null" >
+        prop_name,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="search != null" >
+        search,
+      </if>
+      <if test="show != null" >
+        show,
+      </if>
+      <if test="isDef != null" >
+        is_def,
+      </if>
+      <if test="showType != null" >
+        show_type,
+      </if>
+      <if test="propType != null" >
+        prop_type,
+      </if>
+      <if test="propMemo != null" >
+        prop_memo,
+      </if>
+      <if test="orderSort != null" >
+        order_sort,
+      </if>
+      <if test="modifiedTime != null" >
+        modified_time,
+      </if>
+      <if test="disabled != null" >
+        disabled,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="propId != null" >
+        #{propId,jdbcType=INTEGER},
+      </if>
+      <if test="propName != null" >
+        #{propName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="search != null" >
+        #{search,jdbcType=VARCHAR},
+      </if>
+      <if test="show != null" >
+        #{show,jdbcType=VARCHAR},
+      </if>
+      <if test="isDef != null" >
+        #{isDef,jdbcType=INTEGER},
+      </if>
+      <if test="showType != null" >
+        #{showType,jdbcType=VARCHAR},
+      </if>
+      <if test="propType != null" >
+        #{propType,jdbcType=VARCHAR},
+      </if>
+      <if test="propMemo != null" >
+        #{propMemo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSort != null" >
+        #{orderSort,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null" >
+        #{modifiedTime,jdbcType=INTEGER},
+      </if>
+      <if test="disabled != null" >
+        #{disabled,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.meiduimall.service.catalog.entity.SyscategoryProps" >
+    update syscategory_props
+    <set >
+      <if test="propName != null" >
+        prop_name = #{propName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="search != null" >
+        search = #{search,jdbcType=VARCHAR},
+      </if>
+      <if test="show != null" >
+        show = #{show,jdbcType=VARCHAR},
+      </if>
+      <if test="isDef != null" >
+        is_def = #{isDef,jdbcType=INTEGER},
+      </if>
+      <if test="showType != null" >
+        show_type = #{showType,jdbcType=VARCHAR},
+      </if>
+      <if test="propType != null" >
+        prop_type = #{propType,jdbcType=VARCHAR},
+      </if>
+      <if test="propMemo != null" >
+        prop_memo = #{propMemo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSort != null" >
+        order_sort = #{orderSort,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null" >
+        modified_time = #{modifiedTime,jdbcType=INTEGER},
+      </if>
+      <if test="disabled != null" >
+        disabled = #{disabled,jdbcType=INTEGER},
+      </if>
+    </set>
+    where prop_id = #{propId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.meiduimall.service.catalog.entity.SyscategoryProps" >
+    update syscategory_props
+    set prop_name = #{propName,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      search = #{search,jdbcType=VARCHAR},
+      show = #{show,jdbcType=VARCHAR},
+      is_def = #{isDef,jdbcType=INTEGER},
+      show_type = #{showType,jdbcType=VARCHAR},
+      prop_type = #{propType,jdbcType=VARCHAR},
+      prop_memo = #{propMemo,jdbcType=VARCHAR},
+      order_sort = #{orderSort,jdbcType=INTEGER},
+      modified_time = #{modifiedTime,jdbcType=INTEGER},
+      disabled = #{disabled,jdbcType=INTEGER}
+    where prop_id = #{propId,jdbcType=INTEGER}
+  </update>
+</mapper>

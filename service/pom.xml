@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>meduimall-service-starter</artifactId>
+        <groupId>com.meiduimall.starter</groupId>
+        <version>1.0.1-SNAPSHOT</version>
+        <relativePath>../starter/meduimall-service-starter</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.meiduimall</groupId>
+    <artifactId>service</artifactId>
+    <name>mall::service</name>
+    <packaging>pom</packaging>
+    <version>1.0.1-SNAPSHOT</version>
+    <modules>
+        <module>payment-service</module>
+        <module>sms-service</module>
+        <module>settlement-service</module>
+		<module>catalog-service</module>
+		<module>financial-service</module>
+	    <module>member-service</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-eureka</artifactId>
+        </dependency>
+
+        <!-- 	<dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-config</artifactId>
+            </dependency> -->
+        <dependency>
+            <groupId>com.meiduimall</groupId>
+            <artifactId>meiduimall-support-redis</artifactId>
+            <version>${meiduimall-support-redis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.meiduimall</groupId>
+            <artifactId>meiduimall-support-security</artifactId>
+            <version>${meiduimall-support-security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.meiduimall</groupId>
+            <artifactId>meiduimall-support-core</artifactId>
+            <version>${meiduimall-support-core.version}</version>
+        </dependency>
+
+
+    </dependencies>
+
+
+</project>

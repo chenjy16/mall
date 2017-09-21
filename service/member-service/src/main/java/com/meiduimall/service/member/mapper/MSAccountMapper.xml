@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--会员账户表ms_account相关操作 -->
+<mapper namespace="MSAccountMapper">
+	
+	<!--根据memid和账户类型查询会员账户信息 -->
+	<select id="getAccountByMemId"  parameterType="java.util.Map" resultType="com.meiduimall.service.member.model.MSAccount">
+	SELECT 
+	a.balance AS balance,
+	a.freeze_balance AS freezeBalance
+	FROM ms_account AS a 
+	WHERE 1=1 
+	AND a.mem_id=#{memid} 
+	AND a.type=#{type}
+	</select>
+	
+</mapper>

@@ -1,0 +1,123 @@
+server:
+  port: ${PORT:9050}
+spring:
+  profiles:
+    active: dev
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000 #缺省为1000
+zuul:
+  ignoredServices: '*'
+  routes:
+    user-service:
+      path: /mall/mall_user_service/v1/**
+      serviceId: mall-user-service
+    commodity-service:
+      path: /mall/mall_commodity_service/v1/**
+      serviceId: mall-commodity-service
+    shoppingcart-service:
+      path: /mall/mall_shoppingcart_service/v1/**
+      serviceId: mall-shoppingcart-service
+    order-service:
+      path: /mall/mall_order_service/v1/**
+      serviceId: mall-order-service
+    config-refresh:
+      path: /bus/refresh/**
+      serviceId: service-config
+    ##会员系统用户服务
+    member-service:
+      path: /member/member_service/v1/**
+      serviceId: member-service
+    ##会员系统账户服务
+    account-servcie:
+      path: /member/account_service/v1/**
+      serviceId: account-service
+      stripPrefix: false
+    ##短信通知服务
+    short_msg_service:
+      path: /notify/short_msg_service/**
+      serviceId: short_msg_service
+      stripPrefix: false
+    ##短信服务
+    service-push:
+      path: /push/push-service/v1/**
+      serviceId: service-push
+---
+spring:
+  profiles: dev
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://192.168.4.240:9001/eureka/
+    registry-fetch-interval-seconds: 10  
+    healthcheck:
+      enabled: true  
+  instance:
+    hostname: 192.168.4.240
+    lease-renewal-interval-in-seconds: 15      # 心跳时间，即服务续约间隔时间（缺省为30s）
+    lease-expiration-duration-in-seconds: 30  # 发呆时间，即服务续约到期时间（缺省为90s）    
+config:
+  jedis :  
+    jedisShardInfo :  
+      host : 192.168.4.236
+      port : 6379  
+      password : meiduiredis2016  
+    maxTotal: 1024  
+    maxIdle: 250  
+    maxWaitMillis : 2000 
+    testOnBorrow: true
+    testOnReturn: true
+---
+spring:
+  profiles: pro
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://10.116.21.93:9001/eureka/
+    registry-fetch-interval-seconds: 10
+    healthcheck:
+      enabled: true
+  instance:
+    hostname: 10.116.21.93
+    lease-renewal-interval-in-seconds: 15      # 心跳时间，即服务续约间隔时间（缺省为30s）
+    lease-expiration-duration-in-seconds: 30  # 发呆时间，即服务续约到期时间（缺省为90s）
+config:
+  jedis :
+    jedisShardInfo :
+      host :
+      port :
+      password :
+    maxTotal: 1024
+    maxIdle: 250
+    maxWaitMillis : 2000
+    testOnBorrow: true
+    testOnReturn: true
+---
+spring:
+  profiles: test
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://10.45.178.235:9001/eureka/
+    registry-fetch-interval-seconds: 10
+    healthcheck:
+      enabled: true
+  instance:
+    hostname: 10.45.178.235
+    lease-renewal-interval-in-seconds: 15      # 心跳时间，即服务续约间隔时间（缺省为30s）
+    lease-expiration-duration-in-seconds: 30  # 发呆时间，即服务续约到期时间（缺省为90s）
+config:
+  jedis :
+    jedisShardInfo :
+      host : 10.45.178.235
+      port : 6379
+      password : meiduiredis2017Md?!
+    maxTotal: 1024
+    maxIdle: 250
+    maxWaitMillis : 2000
+    testOnBorrow: true
+    testOnReturn: true

@@ -1,0 +1,533 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="EcmMzfDrawMapper" >
+
+  <sql id="Base_Column_List" >
+    id, draw_code drawCode, draw_type drawType, code, user_type userType, realname, bankname, banknum, bankaddress, 
+    bank_branch bankBranch, money, cash_withdrawal_fee cashWithdrawalFee, total_money totalMoney, add_time addTime, status, remark, draw_time drawTime, 
+    verify_id verifyId, verify_name verifyName, verify_time verifyTime, verify_status verifyStatus, finance_id financeId, finance_name financeName, finance_time financeTime, 
+    finance_status financeStatus, draw_name drawName
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultType="EcmMzfDraw" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ecm_mzf_draw
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 获取提现管理列表  -->
+  <select id="querydrawcash" parameterType="java.util.Map" resultType="EcmMzfDraw">
+        SELECT 
+		  a.id,
+		  a.draw_code drawCode,
+		  a.draw_type drawType,
+		  a.code,
+		  a.user_type userType,
+		  a.realname,
+		  a.bankname,
+		  a.banknum,
+		  a.bankaddress,
+		  a.bank_branch bankBranch,
+		  a.money,
+		  a.cash_withdrawal_fee cashWithdrawalFee,
+		  a.total_money totalMoney,
+		  a.add_time addTime,
+		  a.status,
+		  a.remark,
+		  a.draw_time drawTime,
+		  a.verify_id verifyId,
+		  a.verify_name verifyName,
+		  a.verify_time verifyTime,
+		  a.verify_status verifyStatus,
+		  a.finance_id financeId,
+		  a.finance_name financeName,
+		  a.finance_time financeTime,
+		  a.finance_status financeStatus,
+		  a.draw_name drawName,
+		  (SELECT 
+		    COUNT(*) 
+		  FROM
+		    ecm_mzf_draw b 
+		  WHERE b.code = a.code 
+		    AND FROM_UNIXTIME(b.add_time, '%Y-%m-%d') = FROM_UNIXTIME(a.add_time, '%Y-%m-%d')) drawNo 
+		FROM
+		  ecm_mzf_draw a 
+		WHERE 1 = 1 
+    <if test="drawCode!= null" >
+     and draw_code = #{drawCode,jdbcType=VARCHAR}
+    </if>
+    <if test="drawType != null" >
+     and draw_type = #{drawType,jdbcType=BIT}
+    </if>
+    <if test="code != null" >
+      and code = #{code,jdbcType=VARCHAR}
+    </if>
+    <if test="realname != null" >
+      and realname = #{realname,jdbcType=VARCHAR}
+    </if>
+    <if test="userType != null" >
+      and user_type = #{userType,jdbcType=VARCHAR}	
+    </if>
+    <if test="addTimeStart != null" >
+      and add_time &lt;= #{addTimeStart,jdbcType=INTEGER}
+    </if>
+    <if test="addTimeEnd != null" >
+      and add_time &gt;= #{addTimeEnd,jdbcType=INTEGER}
+    </if>
+    <if test="status != null" >
+      and status = #{status,jdbcType=BIT}
+    </if>
+    <if test="drawName != null" >
+      and draw_name = #{drawName,jdbcType=VARCHAR}
+    </if>
+    ORDER BY add_time DESC 
+  </select>
+  
+  <select id="getDrawCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+	select count(*) from ecm_mzf_draw WHERE 1 = 1
+	<if test="drawCode!= null" >
+     and draw_code = #{drawCode,jdbcType=VARCHAR}
+    </if>
+    <if test="drawType != null" >
+     and draw_type = #{drawType,jdbcType=BIT}
+    </if>
+    <if test="code != null" >
+      and code = #{code,jdbcType=VARCHAR}
+    </if>
+    <if test="realname != null" >
+      and realname = #{realname,jdbcType=VARCHAR}
+    </if>
+    <if test="userType != null" >
+      and user_type = #{userType,jdbcType=VARCHAR}	
+    </if>
+    <if test="addTimeStart != null" >
+      and add_time &lt;= #{addTimeStart,jdbcType=INTEGER}
+    </if>
+    <if test="addTimeEnd != null" >
+      and add_time &gt;= #{addTimeEnd,jdbcType=INTEGER}
+    </if>
+    <if test="status != null" >
+      and status = #{status,jdbcType=BIT}
+    </if>
+    <if test="drawName != null" >
+      and draw_name = #{drawName,jdbcType=VARCHAR}
+    </if>
+  </select>
+  
+  <!-- 根据提现编号获取提现详情  -->
+  <select id="querydrawcashbyid" parameterType="EcmMzfDraw" resultType="EcmMzfDraw">
+       select 
+    <include refid="Base_Column_List" />
+    from ecm_mzf_draw
+    where draw_code = #{drawCode,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 审核提现申请  -->
+  <update id="verifydrawcashbyid" parameterType="EcmMzfDraw">
+    update ecm_mzf_draw 
+    set status = #{status},
+    verify_status = #{verifyStatus},
+    verify_id = #{verifyId},
+    verify_name = #{verifyName},
+    verify_time = #{verifyTime},
+    draw_name = #{drawName}
+    where draw_code = #{drawCode}
+  </update>
+  
+  <!-- 驳回提现申请接口  -->
+  <update id="rejectdrawcashbyid" parameterType="EcmMzfDraw">
+    update ecm_mzf_draw 
+    set status = #{status},
+    verify_status=#{verifyStatus},
+    verify_id=#{verifyId},
+    verify_name=#{verifyName},
+    verify_time=#{verifyTime},
+    remark=#{remark},
+    draw_name = #{drawName}
+    where draw_code = #{drawCode}
+  </update>
+  
+  <!-- 提现确认转账成功或失败接口（财务更改提现单状态） -->
+  <update id="confirmdrawcashbyidbytype" parameterType="EcmMzfDraw">
+    update ecm_mzf_draw 
+	set	status=#{status},
+		finance_status=#{financeStatus},
+		<if test="remark != null" >
+	      remark = #{remark},
+	    </if>
+        finance_id=#{financeId},
+        finance_name=#{financeName},
+        finance_time=#{financeTime}   
+    where draw_code = #{drawCode}
+  </update>
+  
+  <update id="updDrawWaterStatusById" parameterType="EcmMzfDrawWater">
+  	UPDATE ecm_mzf_draw_water dw SET dw.`status`=#{status} WHERE dw.`draw_code`=#{drawCode};
+  </update>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ecm_mzf_draw
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 新增提现申请记录接口  -->
+   <insert id="insertDraw" parameterType="EcmMzfDraw" >
+	   INSERT INTO ecm_mzf_draw (
+		  draw_code,
+		  draw_type,
+		  code,
+		  user_type,
+		  realname,
+		  bankname,
+		  banknum,
+		  bankaddress,
+		  bank_branch,
+		  money,
+		  cash_withdrawal_fee,
+		  total_money,
+		  add_time,
+		  draw_time
+		) 
+		VALUES
+		  (
+			  #{drawCode}, 
+			  #{drawType}, 
+			  #{code}, 
+			  #{userType}, 
+			  #{realname}, 
+			  #{bankname}, 
+			  #{banknum}, 
+			  #{bankaddress}, 
+			  #{bankBranch}, 
+			  #{money}, 
+			  #{cashWithdrawalFee}, 
+			  #{totalMoney}, 
+			  #{addTime},
+			  #{drawTime}
+		  )
+ </insert>  
+  
+  <insert id="insertSelective" parameterType="EcmMzfDraw" >
+    insert into ecm_mzf_draw
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="drawCode != null" >
+        draw_code,
+      </if>
+      <if test="drawType != null" >
+        draw_type,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="userType != null" >
+        user_type,
+      </if>
+      <if test="realname != null" >
+        realname,
+      </if>
+      <if test="bankname != null" >
+        bankname,
+      </if>
+      <if test="banknum != null" >
+        banknum,
+      </if>
+      <if test="bankaddress != null" >
+        bankaddress,
+      </if>
+      <if test="bankBranch != null" >
+        bank_branch,
+      </if>
+      <if test="money != null" >
+        money,
+      </if>
+      <if test="cashWithdrawalFee != null" >
+        cash_withdrawal_fee,
+      </if>
+      <if test="totalMoney != null" >
+        total_money,
+      </if>
+      <if test="addTime != null" >
+        add_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="drawTime != null" >
+        draw_time,
+      </if>
+      <if test="verifyId != null" >
+        verify_id,
+      </if>
+      <if test="verifyName != null" >
+        verify_name,
+      </if>
+      <if test="verifyTime != null" >
+        verify_time,
+      </if>
+      <if test="verifyStatus != null" >
+        verify_status,
+      </if>
+      <if test="financeId != null" >
+        finance_id,
+      </if>
+      <if test="financeName != null" >
+        finance_name,
+      </if>
+      <if test="financeTime != null" >
+        finance_time,
+      </if>
+      <if test="financeStatus != null" >
+        finance_status,
+      </if>
+      <if test="drawName != null" >
+        draw_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="drawCode != null" >
+        #{drawCode,jdbcType=VARCHAR},
+      </if>
+      <if test="drawType != null" >
+        #{drawType,jdbcType=BIT},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null" >
+        #{userType,jdbcType=BIT},
+      </if>
+      <if test="realname != null" >
+        #{realname,jdbcType=VARCHAR},
+      </if>
+      <if test="bankname != null" >
+        #{bankname,jdbcType=VARCHAR},
+      </if>
+      <if test="banknum != null" >
+        #{banknum,jdbcType=VARCHAR},
+      </if>
+      <if test="bankaddress != null" >
+        #{bankaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="bankBranch != null" >
+        #{bankBranch,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null" >
+        #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="cashWithdrawalFee != null" >
+        #{cashWithdrawalFee,jdbcType=DECIMAL},
+      </if>
+      <if test="totalMoney != null" >
+        #{totalMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="addTime != null" >
+        #{addTime,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=BIT},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="drawTime != null" >
+        #{drawTime,jdbcType=INTEGER},
+      </if>
+      <if test="verifyId != null" >
+        #{verifyId,jdbcType=INTEGER},
+      </if>
+      <if test="verifyName != null" >
+        #{verifyName,jdbcType=VARCHAR},
+      </if>
+      <if test="verifyTime != null" >
+        #{verifyTime,jdbcType=INTEGER},
+      </if>
+      <if test="verifyStatus != null" >
+        #{verifyStatus,jdbcType=BIT},
+      </if>
+      <if test="financeId != null" >
+        #{financeId,jdbcType=INTEGER},
+      </if>
+      <if test="financeName != null" >
+        #{financeName,jdbcType=VARCHAR},
+      </if>
+      <if test="financeTime != null" >
+        #{financeTime,jdbcType=INTEGER},
+      </if>
+      <if test="financeStatus != null" >
+        #{financeStatus,jdbcType=BIT},
+      </if>
+      <if test="drawName != null" >
+        #{drawName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="EcmMzfDraw" >
+    update ecm_mzf_draw
+    <set >
+      <if test="drawCode != null" >
+        draw_code = #{drawCode,jdbcType=VARCHAR},
+      </if>
+      <if test="drawType != null" >
+        draw_type = #{drawType,jdbcType=BIT},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null" >
+        user_type = #{userType,jdbcType=BIT},
+      </if>
+      <if test="realname != null" >
+        realname = #{realname,jdbcType=VARCHAR},
+      </if>
+      <if test="bankname != null" >
+        bankname = #{bankname,jdbcType=VARCHAR},
+      </if>
+      <if test="banknum != null" >
+        banknum = #{banknum,jdbcType=VARCHAR},
+      </if>
+      <if test="bankaddress != null" >
+        bankaddress = #{bankaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="bankBranch != null" >
+        bank_branch = #{bankBranch,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null" >
+        money = #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="cashWithdrawalFee != null" >
+        cash_withdrawal_fee = #{cashWithdrawalFee,jdbcType=DECIMAL},
+      </if>
+      <if test="totalMoney != null" >
+        total_money = #{totalMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="addTime != null" >
+        add_time = #{addTime,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=BIT},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="drawTime != null" >
+        draw_time = #{drawTime,jdbcType=INTEGER},
+      </if>
+      <if test="verifyId != null" >
+        verify_id = #{verifyId,jdbcType=INTEGER},
+      </if>
+      <if test="verifyName != null" >
+        verify_name = #{verifyName,jdbcType=VARCHAR},
+      </if>
+      <if test="verifyTime != null" >
+        verify_time = #{verifyTime,jdbcType=INTEGER},
+      </if>
+      <if test="verifyStatus != null" >
+        verify_status = #{verifyStatus,jdbcType=BIT},
+      </if>
+      <if test="financeId != null" >
+        finance_id = #{financeId,jdbcType=INTEGER},
+      </if>
+      <if test="financeName != null" >
+        finance_name = #{financeName,jdbcType=VARCHAR},
+      </if>
+      <if test="financeTime != null" >
+        finance_time = #{financeTime,jdbcType=INTEGER},
+      </if>
+      <if test="financeStatus != null" >
+        finance_status = #{financeStatus,jdbcType=BIT},
+      </if>
+      <if test="drawName != null" >
+        draw_name = #{drawName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="EcmMzfDraw" >
+    update ecm_mzf_draw
+    set draw_code = #{drawCode,jdbcType=VARCHAR},
+      draw_type = #{drawType,jdbcType=BIT},
+      code = #{code,jdbcType=VARCHAR},
+      user_type = #{userType,jdbcType=BIT},
+      realname = #{realname,jdbcType=VARCHAR},
+      bankname = #{bankname,jdbcType=VARCHAR},
+      banknum = #{banknum,jdbcType=VARCHAR},
+      bankaddress = #{bankaddress,jdbcType=VARCHAR},
+      bank_branch = #{bankBranch,jdbcType=VARCHAR},
+      money = #{money,jdbcType=DECIMAL},
+      cash_withdrawal_fee = #{cashWithdrawalFee,jdbcType=DECIMAL},
+      total_money = #{totalMoney,jdbcType=DECIMAL},
+      add_time = #{addTime,jdbcType=INTEGER},
+      status = #{status,jdbcType=BIT},
+      remark = #{remark,jdbcType=VARCHAR},
+      draw_time = #{drawTime,jdbcType=INTEGER},
+      verify_id = #{verifyId,jdbcType=INTEGER},
+      verify_name = #{verifyName,jdbcType=VARCHAR},
+      verify_time = #{verifyTime,jdbcType=INTEGER},
+      verify_status = #{verifyStatus,jdbcType=BIT},
+      finance_id = #{financeId,jdbcType=INTEGER},
+      finance_name = #{financeName,jdbcType=VARCHAR},
+      finance_time = #{financeTime,jdbcType=INTEGER},
+      finance_status = #{financeStatus,jdbcType=BIT},
+      draw_name = #{drawName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 插入提现流水 -->
+  <insert id="insertDrawWater" parameterType="EcmMzfDrawWater">
+  	INSERT INTO ecm_mzf_draw_water (
+	  draw_code,
+	  CODE,
+	  STATUS,
+	  money,
+	  remark,
+	  draw_time
+	) 
+	VALUES
+	  (
+	    #{drawCode},
+	    #{code},
+	    #{status},
+	    #{money},
+	    #{remark},
+	    #{drawTime}
+	  )
+  </insert>
+  
+  <!-- 查询当前code，当天是否产生提现流水 -->
+  <select id="getDrawWaterCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+  	SELECT 
+	  COUNT(*) 
+	FROM
+	  ecm_mzf_draw_water 
+	WHERE code = #{code} 
+	  AND DATE_FORMAT(draw_time, '%Y-%m-%d') = #{nowTime} 
+  </select>
+  
+  <!-- 用于判断当前code提现是否需要手续费 -->
+  <select id="getCountByCode" parameterType="java.util.Map" resultType="java.lang.Integer">
+	  	SELECT 
+	  COUNT(*) AS tp_count 
+	FROM
+	  ecm_mzf_draw a
+	WHERE (
+	    FROM_UNIXTIME(a.add_time, '%Y-%m-%d') = #{nowTime} 
+	    and (a.status != 3 or a.status != 5) 
+	    and a.code = #{code} 
+	    and a.draw_type = #{drawType}
+	  ) 
+	LIMIT 10 
+  </select>
+  
+</mapper>

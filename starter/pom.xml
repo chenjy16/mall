@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.4.4.RELEASE</version>
+        <relativePath />
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.meiduimall</groupId>
+    <artifactId>starter</artifactId>
+    <name>mall::starter</name>
+    <version>1.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    		
+	
+    <modules>
+        <module>meduimall-service-starter</module>
+    </modules>
+
+
+    <distributionManagement>
+        <repository>
+            <id>maven-releases</id>
+            <name>maven-releases</name>
+            <url>http://maven.meiduimall.com/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>maven-snapshots</id>
+            <name>maven-snapshots</name>
+            <url>http://maven.meiduimall.com/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+  <scm>
+    <tag>mall-1.0.0</tag>
+  </scm>
+</project>

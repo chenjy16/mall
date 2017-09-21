@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="SysuserAccountMapper" >
+  <resultMap id="BaseResultMap" type="com.meiduimall.service.catalog.entity.SysuserAccount" >
+    <id column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="login_account" property="loginAccount" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="login_password" property="loginPassword" jdbcType="VARCHAR" />
+    <result column="login_token" property="loginToken" jdbcType="VARCHAR" />
+    <result column="login_type" property="loginType" jdbcType="VARCHAR" />
+    <result column="share_man" property="shareMan" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="disabled" property="disabled" jdbcType="INTEGER" />
+    <result column="createtime" property="createtime" jdbcType="INTEGER" />
+    <result column="modified_time" property="modifiedTime" jdbcType="INTEGER" />
+    <result column="pay_password" property="payPassword" jdbcType="VARCHAR" />
+    <result column="mem_id" property="memId" jdbcType="VARCHAR" />
+    <result column="use_pay_password" property="usePayPassword" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  
+  <sql id="Base_Column_List" >
+    user_id, login_account, email, mobile, login_password, login_token, login_type, share_man, 
+    area, disabled, createtime, modified_time, pay_password, mem_id, use_pay_password
+  </sql>
+  
+  <select id="selectUserIdByToken" resultType="java.lang.Integer" parameterType="java.lang.String">
+  	SELECT user_id FROM sysuser_account WHERE login_token=#{token};
+  </select>
+  
+  <select id="selectByMemId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  	select 
+    * 
+    from sysuser_account
+    where mem_id = #{memId}
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    * 
+    from sysuser_account
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from sysuser_account
+    where user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.meiduimall.service.catalog.entity.SysuserAccount" >
+    insert into sysuser_account (user_id, login_account, email, 
+      mobile, login_password, login_token, 
+      login_type, share_man, area, 
+      disabled, createtime, modified_time, 
+      pay_password, mem_id, use_pay_password
+      )
+    values (#{userId,jdbcType=INTEGER}, #{loginAccount,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{mobile,jdbcType=VARCHAR}, #{loginPassword,jdbcType=VARCHAR}, #{loginToken,jdbcType=VARCHAR}, 
+      #{loginType,jdbcType=VARCHAR}, #{shareMan,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, 
+      #{disabled,jdbcType=INTEGER}, #{createtime,jdbcType=INTEGER}, #{modifiedTime,jdbcType=INTEGER}, 
+      #{payPassword,jdbcType=VARCHAR}, #{memId,jdbcType=VARCHAR}, #{usePayPassword,jdbcType=INTEGER}
+      )
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.meiduimall.service.catalog.entity.SysuserAccount" >
+    insert into sysuser_account
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="loginAccount != null" >
+        login_account,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="loginPassword != null" >
+        login_password,
+      </if>
+      <if test="loginToken != null" >
+        login_token,
+      </if>
+      <if test="loginType != null" >
+        login_type,
+      </if>
+      <if test="shareMan != null" >
+        share_man,
+      </if>
+      <if test="area != null" >
+        area,
+      </if>
+      <if test="disabled != null" >
+        disabled,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="modifiedTime != null" >
+        modified_time,
+      </if>
+      <if test="payPassword != null" >
+        pay_password,
+      </if>
+      <if test="memId != null" >
+        mem_id,
+      </if>
+      <if test="usePayPassword != null" >
+        use_pay_password,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="loginAccount != null" >
+        #{loginAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="loginPassword != null" >
+        #{loginPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="loginToken != null" >
+        #{loginToken,jdbcType=VARCHAR},
+      </if>
+      <if test="loginType != null" >
+        #{loginType,jdbcType=VARCHAR},
+      </if>
+      <if test="shareMan != null" >
+        #{shareMan,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null" >
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="disabled != null" >
+        #{disabled,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null" >
+        #{modifiedTime,jdbcType=INTEGER},
+      </if>
+      <if test="payPassword != null" >
+        #{payPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="memId != null" >
+        #{memId,jdbcType=VARCHAR},
+      </if>
+      <if test="usePayPassword != null" >
+        #{usePayPassword,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.meiduimall.service.catalog.entity.SysuserAccount" >
+    update sysuser_account
+    <set >
+      <if test="loginAccount != null" >
+        login_account = #{loginAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="loginPassword != null" >
+        login_password = #{loginPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="loginToken != null" >
+        login_token = #{loginToken,jdbcType=VARCHAR},
+      </if>
+      <if test="loginType != null" >
+        login_type = #{loginType,jdbcType=VARCHAR},
+      </if>
+      <if test="shareMan != null" >
+        share_man = #{shareMan,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null" >
+        area = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="disabled != null" >
+        disabled = #{disabled,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null" >
+        modified_time = #{modifiedTime,jdbcType=INTEGER},
+      </if>
+      <if test="payPassword != null" >
+        pay_password = #{payPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="memId != null" >
+        mem_id = #{memId,jdbcType=VARCHAR},
+      </if>
+      <if test="usePayPassword != null" >
+        use_pay_password = #{usePayPassword,jdbcType=INTEGER},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.meiduimall.service.catalog.entity.SysuserAccount" >
+    update sysuser_account
+    set login_account = #{loginAccount,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      login_password = #{loginPassword,jdbcType=VARCHAR},
+      login_token = #{loginToken,jdbcType=VARCHAR},
+      login_type = #{loginType,jdbcType=VARCHAR},
+      share_man = #{shareMan,jdbcType=VARCHAR},
+      area = #{area,jdbcType=VARCHAR},
+      disabled = #{disabled,jdbcType=INTEGER},
+      createtime = #{createtime,jdbcType=INTEGER},
+      modified_time = #{modifiedTime,jdbcType=INTEGER},
+      pay_password = #{payPassword,jdbcType=VARCHAR},
+      mem_id = #{memId,jdbcType=VARCHAR},
+      use_pay_password = #{usePayPassword,jdbcType=INTEGER}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+</mapper>

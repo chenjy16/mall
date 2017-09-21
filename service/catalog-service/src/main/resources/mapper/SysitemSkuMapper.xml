@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="SysitemSkuMapper" >
+  <resultMap id="BaseResultMap" type="com.meiduimall.service.catalog.entity.SysitemSku" >
+    <id column="sku_id" property="skuId" jdbcType="INTEGER" />
+    <result column="item_id" property="itemId" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="bn" property="bn" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="cost_price" property="costPrice" jdbcType="DECIMAL" />
+    <result column="mkt_price" property="mktPrice" jdbcType="DECIMAL" />
+    <result column="barcode" property="barcode" jdbcType="VARCHAR" />
+    <result column="weight" property="weight" jdbcType="DECIMAL" />
+    <result column="created_time" property="createdTime" jdbcType="INTEGER" />
+    <result column="modified_time" property="modifiedTime" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="outer_id" property="outerId" jdbcType="VARCHAR" />
+    <result column="direct_prices" property="directPrices" jdbcType="DECIMAL" />
+    <result column="isdirect" property="isdirect" jdbcType="INTEGER" />
+    <result column="point" property="point" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <resultMap id="ResultMapWithBLOBs" type="com.meiduimall.service.catalog.entity.SysitemSkuWithBLOBs" extends="BaseResultMap" >
+    <result column="properties" property="properties" jdbcType="LONGVARCHAR" />
+    <result column="spec_info" property="specInfo" jdbcType="LONGVARCHAR" />
+    <result column="spec_desc" property="specDesc" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  
+  <sql id="Base_Column_List" >
+    sku_id, item_id, title, bn, price, cost_price, mkt_price, barcode, weight, created_time, 
+    modified_time, status, outer_id, direct_prices, isdirect, point
+  </sql>
+  
+  <sql id="Blob_Column_List" >
+    properties, spec_info, spec_desc
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    * 
+    from sysitem_sku
+    where sku_id = #{skuId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByItemId" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+  	select 
+    * 
+    from sysitem_sku
+    where item_id = #{itemId,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from sysitem_sku
+    where sku_id = #{skuId,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.meiduimall.service.catalog.entity.SysitemSkuWithBLOBs" >
+    insert into sysitem_sku (sku_id, item_id, title, 
+      bn, price, cost_price, 
+      mkt_price, barcode, weight, 
+      created_time, modified_time, status, 
+      outer_id, direct_prices, isdirect, 
+      point, properties, spec_info, 
+      spec_desc)
+    values (#{skuId,jdbcType=INTEGER}, #{itemId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
+      #{bn,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{costPrice,jdbcType=DECIMAL}, 
+      #{mktPrice,jdbcType=DECIMAL}, #{barcode,jdbcType=VARCHAR}, #{weight,jdbcType=DECIMAL}, 
+      #{createdTime,jdbcType=INTEGER}, #{modifiedTime,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, 
+      #{outerId,jdbcType=VARCHAR}, #{directPrices,jdbcType=DECIMAL}, #{isdirect,jdbcType=INTEGER}, 
+      #{point,jdbcType=INTEGER}, #{properties,jdbcType=LONGVARCHAR}, #{specInfo,jdbcType=LONGVARCHAR}, 
+      #{specDesc,jdbcType=LONGVARCHAR})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.meiduimall.service.catalog.entity.SysitemSkuWithBLOBs" >
+    insert into sysitem_sku
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="skuId != null" >
+        sku_id,
+      </if>
+      <if test="itemId != null" >
+        item_id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="bn != null" >
+        bn,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="costPrice != null" >
+        cost_price,
+      </if>
+      <if test="mktPrice != null" >
+        mkt_price,
+      </if>
+      <if test="barcode != null" >
+        barcode,
+      </if>
+      <if test="weight != null" >
+        weight,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="modifiedTime != null" >
+        modified_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="outerId != null" >
+        outer_id,
+      </if>
+      <if test="directPrices != null" >
+        direct_prices,
+      </if>
+      <if test="isdirect != null" >
+        isdirect,
+      </if>
+      <if test="point != null" >
+        point,
+      </if>
+      <if test="properties != null" >
+        properties,
+      </if>
+      <if test="specInfo != null" >
+        spec_info,
+      </if>
+      <if test="specDesc != null" >
+        spec_desc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="skuId != null" >
+        #{skuId,jdbcType=INTEGER},
+      </if>
+      <if test="itemId != null" >
+        #{itemId,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="bn != null" >
+        #{bn,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="costPrice != null" >
+        #{costPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="mktPrice != null" >
+        #{mktPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="barcode != null" >
+        #{barcode,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null" >
+        #{modifiedTime,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="outerId != null" >
+        #{outerId,jdbcType=VARCHAR},
+      </if>
+      <if test="directPrices != null" >
+        #{directPrices,jdbcType=DECIMAL},
+      </if>
+      <if test="isdirect != null" >
+        #{isdirect,jdbcType=INTEGER},
+      </if>
+      <if test="point != null" >
+        #{point,jdbcType=INTEGER},
+      </if>
+      <if test="properties != null" >
+        #{properties,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="specInfo != null" >
+        #{specInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="specDesc != null" >
+        #{specDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.meiduimall.service.catalog.entity.SysitemSkuWithBLOBs" >
+    update sysitem_sku
+    <set >
+      <if test="itemId != null" >
+        item_id = #{itemId,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="bn != null" >
+        bn = #{bn,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="costPrice != null" >
+        cost_price = #{costPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="mktPrice != null" >
+        mkt_price = #{mktPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="barcode != null" >
+        barcode = #{barcode,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        weight = #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null" >
+        modified_time = #{modifiedTime,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="outerId != null" >
+        outer_id = #{outerId,jdbcType=VARCHAR},
+      </if>
+      <if test="directPrices != null" >
+        direct_prices = #{directPrices,jdbcType=DECIMAL},
+      </if>
+      <if test="isdirect != null" >
+        isdirect = #{isdirect,jdbcType=INTEGER},
+      </if>
+      <if test="point != null" >
+        point = #{point,jdbcType=INTEGER},
+      </if>
+      <if test="properties != null" >
+        properties = #{properties,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="specInfo != null" >
+        spec_info = #{specInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="specDesc != null" >
+        spec_desc = #{specDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where sku_id = #{skuId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.meiduimall.service.catalog.entity.SysitemSkuWithBLOBs" >
+    update sysitem_sku
+    set item_id = #{itemId,jdbcType=INTEGER},
+      title = #{title,jdbcType=VARCHAR},
+      bn = #{bn,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      cost_price = #{costPrice,jdbcType=DECIMAL},
+      mkt_price = #{mktPrice,jdbcType=DECIMAL},
+      barcode = #{barcode,jdbcType=VARCHAR},
+      weight = #{weight,jdbcType=DECIMAL},
+      created_time = #{createdTime,jdbcType=INTEGER},
+      modified_time = #{modifiedTime,jdbcType=INTEGER},
+      status = #{status,jdbcType=VARCHAR},
+      outer_id = #{outerId,jdbcType=VARCHAR},
+      direct_prices = #{directPrices,jdbcType=DECIMAL},
+      isdirect = #{isdirect,jdbcType=INTEGER},
+      point = #{point,jdbcType=INTEGER},
+      properties = #{properties,jdbcType=LONGVARCHAR},
+      spec_info = #{specInfo,jdbcType=LONGVARCHAR},
+      spec_desc = #{specDesc,jdbcType=LONGVARCHAR}
+    where sku_id = #{skuId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.meiduimall.service.catalog.entity.SysitemSku" >
+    update sysitem_sku
+    set item_id = #{itemId,jdbcType=INTEGER},
+      title = #{title,jdbcType=VARCHAR},
+      bn = #{bn,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      cost_price = #{costPrice,jdbcType=DECIMAL},
+      mkt_price = #{mktPrice,jdbcType=DECIMAL},
+      barcode = #{barcode,jdbcType=VARCHAR},
+      weight = #{weight,jdbcType=DECIMAL},
+      created_time = #{createdTime,jdbcType=INTEGER},
+      modified_time = #{modifiedTime,jdbcType=INTEGER},
+      status = #{status,jdbcType=VARCHAR},
+      outer_id = #{outerId,jdbcType=VARCHAR},
+      direct_prices = #{directPrices,jdbcType=DECIMAL},
+      isdirect = #{isdirect,jdbcType=INTEGER},
+      point = #{point,jdbcType=INTEGER}
+    where sku_id = #{skuId,jdbcType=INTEGER}
+  </update>
+</mapper>

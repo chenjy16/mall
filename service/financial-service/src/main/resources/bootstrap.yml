@@ -1,0 +1,21 @@
+#应用名称
+spring:
+  application:
+    name: financial-system-service
+
+#端口
+server:
+  port: 10099
+
+# mybatis-config
+mybatis :
+  mapper-locations : classpath:mapper/*Mapper.xml
+
+#熔断机制     
+hystrix:  
+    command:  
+    default: 
+      execution:  
+        isolation:  
+          thread:  
+            timeoutInMilliseconds: 3000 #缺省为1000 

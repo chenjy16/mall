@@ -1,0 +1,44 @@
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.4.110:3306/membersystem?characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&allowMultiQueries=true
+    username : meidui
+    password : meiduishop
+    connectionTimeout : 30000
+    idleTimeout : 600000
+    maxLifetime : 1800000
+    maximumPoolSize : 300
+    minimumIdle : 10
+    autoCommit : true;
+    connectionTestQuery : SELECT 1
+
+#注册中心
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://192.168.4.111:9001/eureka/
+    registry-fetch-interval-seconds: 10  
+  healthcheck:
+      enabled: true  
+  instance:
+    hostname: 192.168.4.111
+    lease-renewal-interval-in-seconds: 15      # 心跳时间，即服务续约间隔时间（缺省为30s）
+    lease-expiration-duration-in-seconds: 30  # 发呆时间，即服务续约到期时间（缺省为90s）   
+
+# redis
+config :
+  jedis :  
+    jedisShardInfo :  
+      host : 192.168.4.110  
+      port : 6379 
+      password: meiduiredis2017 
+    maxTotal: 1024  
+    maxIdle: 250  
+    maxWaitMillis : 2000 
+    testOnBorrow: true
+    testOnReturn: true
+    
+# other service url
+service : 
+   account : http://192.168.4.111:8096

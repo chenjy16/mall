@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="SysitemItemDescMapper" >
+  <resultMap id="BaseResultMap" type="com.meiduimall.service.catalog.entity.SysitemItemDesc" >
+    <id column="item_id" property="itemId" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <resultMap id="ResultMapWithBLOBs" type="com.meiduimall.service.catalog.entity.SysitemItemDesc" extends="BaseResultMap" >
+    <result column="pc_desc" property="pcDesc" jdbcType="LONGVARCHAR" />
+    <result column="wap_desc" property="wapDesc" jdbcType="LONGVARCHAR" />
+    <result column="wireless_desc" property="wirelessDesc" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  
+  <sql id="Base_Column_List" >
+    item_id
+  </sql>
+  
+  <sql id="Blob_Column_List" >
+    pc_desc, wap_desc, wireless_desc
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    * 
+    from sysitem_item_desc
+    where item_id = #{itemId,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from sysitem_item_desc
+    where item_id = #{itemId,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.meiduimall.service.catalog.entity.SysitemItemDesc" >
+    insert into sysitem_item_desc (item_id, pc_desc, wap_desc, 
+      wireless_desc)
+    values (#{itemId,jdbcType=INTEGER}, #{pcDesc,jdbcType=LONGVARCHAR}, #{wapDesc,jdbcType=LONGVARCHAR}, 
+      #{wirelessDesc,jdbcType=LONGVARCHAR})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.meiduimall.service.catalog.entity.SysitemItemDesc" >
+    insert into sysitem_item_desc
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="itemId != null" >
+        item_id,
+      </if>
+      <if test="pcDesc != null" >
+        pc_desc,
+      </if>
+      <if test="wapDesc != null" >
+        wap_desc,
+      </if>
+      <if test="wirelessDesc != null" >
+        wireless_desc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="itemId != null" >
+        #{itemId,jdbcType=INTEGER},
+      </if>
+      <if test="pcDesc != null" >
+        #{pcDesc,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="wapDesc != null" >
+        #{wapDesc,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="wirelessDesc != null" >
+        #{wirelessDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.meiduimall.service.catalog.entity.SysitemItemDesc" >
+    update sysitem_item_desc
+    <set >
+      <if test="pcDesc != null" >
+        pc_desc = #{pcDesc,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="wapDesc != null" >
+        wap_desc = #{wapDesc,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="wirelessDesc != null" >
+        wireless_desc = #{wirelessDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where item_id = #{itemId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.meiduimall.service.catalog.entity.SysitemItemDesc" >
+    update sysitem_item_desc
+    set pc_desc = #{pcDesc,jdbcType=LONGVARCHAR},
+      wap_desc = #{wapDesc,jdbcType=LONGVARCHAR},
+      wireless_desc = #{wirelessDesc,jdbcType=LONGVARCHAR}
+    where item_id = #{itemId,jdbcType=INTEGER}
+  </update>
+</mapper>

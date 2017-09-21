@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--登录日志表ms_member_login_log相关操作 -->
+<mapper namespace="MSMemLogMapper">
+
+<!--添加会员登录日志 -->
+	<insert id="insertMemberLog"  parameterType="com.meiduimall.service.member.model.MSMemLog">
+		INSERT INTO ms_member_log VALUES (#{mlogId},#{memId},#{mlogModule},#{mlogAction},#{mlogContent},#{mlogRemark},#{mlogDate},#{mlogIp},
+		#{mlogCreatedBy},#{mlogCreatedDate})
+	</insert>
+	
+</mapper>

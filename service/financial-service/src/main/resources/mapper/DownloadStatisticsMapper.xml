@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="downloadStatisticsMapper" >
+  <resultMap id="BaseResultMap" type="com.meiduimall.service.financial.entity.DownloadStatistics" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="portal" property="portal" jdbcType="INTEGER" />
+    <result column="request_time" property="requestTime" jdbcType="TIMESTAMP" />
+    <result column="ip" property="ip" jdbcType="VARCHAR" />
+    <result column="curr_time" property="currTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.meiduimall.service.financial.entity.DownloadStatistics" extends="BaseResultMap" >
+    <result column="user_agent" property="userAgent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+  <resultMap id="downloadStatisticsResult" type="com.meiduimall.service.financial.entity.DownloadStatisticsResult">
+  	<result column="portal" property="portal"/>
+  	<result column="count(*)" property="count"/>
+  </resultMap>
+  
+  <select id="queryGroupByPortal" parameterType="com.meiduimall.service.financial.entity.DownloadStatisticsDTO" resultMap="downloadStatisticsResult">
+  	SELECT portal,count(*) FROM download_statistics
+  	<where>
+  		<if test="beginDate!=null and beginDate!=''">
+  			and request_time &gt;= #{beginDate}
+  		</if>
+  		<if test="endDate!=null and endDate!=''">
+  			and request_time &lt;= #{endDate}
+  		</if>
+  	</where>
+  	GROUP BY portal
+  </select>
+  
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, portal, request_time, ip, curr_time
+  </sql>
+  <sql id="Blob_Column_List" >
+    user_agent
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from download_statistics
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from download_statistics
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="com.meiduimall.service.financial.entity.DownloadStatistics" >
+    insert into download_statistics (id, portal, request_time, 
+      ip, curr_time, user_agent
+      )
+    values (#{id,jdbcType=INTEGER}, #{portal,jdbcType=INTEGER}, #{requestTime,jdbcType=TIMESTAMP}, 
+      #{ip,jdbcType=VARCHAR}, #{currTime,jdbcType=TIMESTAMP}, #{userAgent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.meiduimall.service.financial.entity.DownloadStatistics" >
+    insert into download_statistics
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="portal != null" >
+        portal,
+      </if>
+      <if test="requestTime != null" >
+        request_time,
+      </if>
+      <if test="ip != null" >
+        ip,
+      </if>
+      <if test="currTime != null" >
+        curr_time,
+      </if>
+      <if test="userAgent != null" >
+        user_agent,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="portal != null" >
+        #{portal,jdbcType=INTEGER},
+      </if>
+      <if test="requestTime != null" >
+        #{requestTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ip != null" >
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="currTime != null" >
+        #{currTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userAgent != null" >
+        #{userAgent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.meiduimall.service.financial.entity.DownloadStatistics" >
+    update download_statistics
+    <set >
+      <if test="portal != null" >
+        portal = #{portal,jdbcType=INTEGER},
+      </if>
+      <if test="requestTime != null" >
+        request_time = #{requestTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ip != null" >
+        ip = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="currTime != null" >
+        curr_time = #{currTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userAgent != null" >
+        user_agent = #{userAgent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.meiduimall.service.financial.entity.DownloadStatistics" >
+    update download_statistics
+    set portal = #{portal,jdbcType=INTEGER},
+      request_time = #{requestTime,jdbcType=TIMESTAMP},
+      ip = #{ip,jdbcType=VARCHAR},
+      curr_time = #{currTime,jdbcType=TIMESTAMP},
+      user_agent = #{userAgent,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.meiduimall.service.financial.entity.DownloadStatistics" >
+    update download_statistics
+    set portal = #{portal,jdbcType=INTEGER},
+      request_time = #{requestTime,jdbcType=TIMESTAMP},
+      ip = #{ip,jdbcType=VARCHAR},
+      curr_time = #{currTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

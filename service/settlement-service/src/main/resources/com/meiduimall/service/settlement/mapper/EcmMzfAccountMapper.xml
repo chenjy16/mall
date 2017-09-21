@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EcmMzfAccountMapper">
+
+	<!-- 根据代理编码修改其对应金额  -->
+	<update id="updateAccountByCode" parameterType="EcmMzfAccount">
+		UPDATE 
+		  ecm_mzf_account 
+		SET
+		  balance = balance + (#{balance}) where code = #{code}
+	</update>
+	
+	<!-- 插入账户信息 -->
+	<insert id="insertAccount" parameterType="EcmMzfAccount">
+		INSERT INTO ecm_mzf_account (
+		  code,
+		  account_role_type
+		) 
+		VALUES
+		  (
+		  	#{code},
+		  	#{accountRoleType}
+		  )
+	</insert>
+	
+	<!-- 根据code查询account是否存在 -->
+	<select id="findAccountByCode" parameterType="java.lang.String" resultType="EcmMzfAccount">
+		SELECT 
+		  account_id accountId,
+		  code,
+		  account_role_type accountRoleType,
+		  balance 
+		FROM
+		  ecm_mzf_account 
+		WHERE code = #{code}
+	</select>
+
+    <!-- 获取区代、个代或商家可提现金额  -->
+    <select id="queryaccoutbalance" parameterType="java.lang.String" resultType="java.util.Map">
+       SELECT code,balance FROM ecm_mzf_account WHERE code = #{code}
+    </select>
+
+</mapper>

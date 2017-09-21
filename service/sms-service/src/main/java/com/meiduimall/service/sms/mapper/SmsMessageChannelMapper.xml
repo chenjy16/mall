@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ * @项目名称: ${project_name}
+  ~ *
+  ~ * @文件名称: ${file_name}
+  ~ * @Date: ${date}
+  ~ * @Copyright: ${year} www.meiduimall.com Inc. All rights reserved.
+  ~ *
+  ~ * 注意：本内容仅限于美兑壹购物公司内部传阅，禁止外泄以及用于其他的商业目的
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.meiduimall.service.sms.mapper.SmsMessageChannelMapper" >
+  <resultMap id="BaseResultMap" type="com.meiduimall.service.sms.entity.MessageChannel" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="channel_key" property="channelKey" jdbcType="VARCHAR" />
+    <result column="channel_name" property="channelName" jdbcType="VARCHAR" />
+    <result column="requst_url" property="requstUrl" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="pass_word" property="passWord" jdbcType="VARCHAR" />
+    <result column="effective_time" property="effectiveTime" jdbcType="VARCHAR" />
+    <result column="is_enabled" property="isEnabled" jdbcType="CHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="creater" property="creater" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="sort_no" property="sortNo" jdbcType="NUMERIC" />
+  </resultMap>
+    
+  <sql id="Base_Column_List" >
+    id, channel_key, channel_name, requst_url, user_name, pass_word, effective_time, 
+    is_enabled, remark, creater, create_date,sort_no
+  </sql>
+  
+  <insert id="insert" parameterType="com.meiduimall.service.sms.entity.MessageChannel" >
+    insert into msg_message_channel (id, channel_key, channel_name, 
+      requst_url, user_name, pass_word, 
+      effective_time, is_enabled, remark, 
+      creater, create_date,sort_no)
+    values (#{id,jdbcType=VARCHAR}, #{channelKey,jdbcType=VARCHAR}, #{channelName,jdbcType=VARCHAR}, 
+      #{requstUrl,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{passWord,jdbcType=VARCHAR}, 
+      #{effectiveTime,jdbcType=VARCHAR}, #{isEnabled,jdbcType=CHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{creater,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP},#{sortNo,jdbcType=NUMERIC})
+  </insert>
+  <insert id="insertSelective" parameterType="com.meiduimall.service.sms.entity.MessageChannel" >
+    insert into msg_message_channel
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="channelKey != null" >
+        channel_key,
+      </if>
+      <if test="channelName != null" >
+        channel_name,
+      </if>
+      <if test="requstUrl != null" >
+        requst_url,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="passWord != null" >
+        pass_word,
+      </if>
+      <if test="effectiveTime != null" >
+        effective_time,
+      </if>
+      <if test="isEnabled != null" >
+        is_enabled,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="creater != null" >
+        creater,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="sortNo != null" >
+        sort_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="channelKey != null" >
+        #{channelKey,jdbcType=VARCHAR},
+      </if>
+      <if test="channelName != null" >
+        #{channelName,jdbcType=VARCHAR},
+      </if>
+      <if test="requstUrl != null" >
+        #{requstUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="passWord != null" >
+        #{passWord,jdbcType=VARCHAR},
+      </if>
+      <if test="effectiveTime != null" >
+        #{effectiveTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isEnabled != null" >
+        #{isEnabled,jdbcType=CHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="creater != null" >
+        #{creater,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sortNo != null" >
+        #{sortNo,jdbcType=NUMERIC},
+      </if>
+    </trim>
+  </insert>
+  
+  <select id="getChannelList" resultMap="BaseResultMap">
+   select 
+    <include refid="Base_Column_List" />
+    from msg_message_channel
+    where is_enabled = '1' order by sort_no asc
+  </select>
+</mapper>

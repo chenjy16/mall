@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="SysshopShopCatMapper" >
+  <resultMap id="BaseResultMap" type="com.meiduimall.service.catalog.entity.SysshopShopCat" >
+    <id column="cat_id" property="catId" jdbcType="INTEGER" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+    <result column="cat_path" property="catPath" jdbcType="VARCHAR" />
+    <result column="level" property="level" jdbcType="VARCHAR" />
+    <result column="is_leaf" property="isLeaf" jdbcType="INTEGER" />
+    <result column="cat_name" property="catName" jdbcType="VARCHAR" />
+    <result column="order_sort" property="orderSort" jdbcType="INTEGER" />
+    <result column="modified_time" property="modifiedTime" jdbcType="INTEGER" />
+    <result column="disabled" property="disabled" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  
+  <sql id="Base_Column_List" >
+    cat_id, shop_id, parent_id, cat_path, level, is_leaf, cat_name, order_sort, modified_time, 
+    disabled
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    * 
+    from sysshop_shop_cat
+    where cat_id = #{catId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByShopId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  	select 
+    * 
+    from sysshop_shop_cat
+    where shop_id = #{shopId,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from sysshop_shop_cat
+    where cat_id = #{catId,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.meiduimall.service.catalog.entity.SysshopShopCat" >
+    insert into sysshop_shop_cat (cat_id, shop_id, parent_id, 
+      cat_path, level, is_leaf, 
+      cat_name, order_sort, modified_time, 
+      disabled)
+    values (#{catId,jdbcType=INTEGER}, #{shopId,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, 
+      #{catPath,jdbcType=VARCHAR}, #{level,jdbcType=VARCHAR}, #{isLeaf,jdbcType=INTEGER}, 
+      #{catName,jdbcType=VARCHAR}, #{orderSort,jdbcType=INTEGER}, #{modifiedTime,jdbcType=INTEGER}, 
+      #{disabled,jdbcType=INTEGER})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.meiduimall.service.catalog.entity.SysshopShopCat" >
+    insert into sysshop_shop_cat
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="catId != null" >
+        cat_id,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="parentId != null" >
+        parent_id,
+      </if>
+      <if test="catPath != null" >
+        cat_path,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="isLeaf != null" >
+        is_leaf,
+      </if>
+      <if test="catName != null" >
+        cat_name,
+      </if>
+      <if test="orderSort != null" >
+        order_sort,
+      </if>
+      <if test="modifiedTime != null" >
+        modified_time,
+      </if>
+      <if test="disabled != null" >
+        disabled,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="catId != null" >
+        #{catId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="catPath != null" >
+        #{catPath,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="isLeaf != null" >
+        #{isLeaf,jdbcType=INTEGER},
+      </if>
+      <if test="catName != null" >
+        #{catName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSort != null" >
+        #{orderSort,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null" >
+        #{modifiedTime,jdbcType=INTEGER},
+      </if>
+      <if test="disabled != null" >
+        #{disabled,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.meiduimall.service.catalog.entity.SysshopShopCat" >
+    update sysshop_shop_cat
+    <set >
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="catPath != null" >
+        cat_path = #{catPath,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        level = #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="isLeaf != null" >
+        is_leaf = #{isLeaf,jdbcType=INTEGER},
+      </if>
+      <if test="catName != null" >
+        cat_name = #{catName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSort != null" >
+        order_sort = #{orderSort,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null" >
+        modified_time = #{modifiedTime,jdbcType=INTEGER},
+      </if>
+      <if test="disabled != null" >
+        disabled = #{disabled,jdbcType=INTEGER},
+      </if>
+    </set>
+    where cat_id = #{catId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.meiduimall.service.catalog.entity.SysshopShopCat" >
+    update sysshop_shop_cat
+    set shop_id = #{shopId,jdbcType=INTEGER},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      cat_path = #{catPath,jdbcType=VARCHAR},
+      level = #{level,jdbcType=VARCHAR},
+      is_leaf = #{isLeaf,jdbcType=INTEGER},
+      cat_name = #{catName,jdbcType=VARCHAR},
+      order_sort = #{orderSort,jdbcType=INTEGER},
+      modified_time = #{modifiedTime,jdbcType=INTEGER},
+      disabled = #{disabled,jdbcType=INTEGER}
+    where cat_id = #{catId,jdbcType=INTEGER}
+  </update>
+</mapper>

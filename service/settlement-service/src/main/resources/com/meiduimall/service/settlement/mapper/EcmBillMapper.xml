@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EcmBillMapper">
+
+	<!-- 查询分润单用订单号和订单表关联，扫描待结算已分润已审核的数据-->
+	<!-- keep-->
+	<select id="queryReviewedShareOrder"  resultType="EcmMzfBillWater" parameterType="java.lang.Long">
+	SELECT a.seller_name AS CODE, ROUND(SUM(a.seller_profit),2) AS amount, 1 AS TYPE FROM ecm_mzf_shareprofit a INNER JOIN ecm_mzf_order_status b 
+	  ON a.`order_sn` = b.`order_sn` WHERE b.`bill_status` = 1  AND b.`share_status` = 1 AND (b.`verify_time`&gt;0 AND b.`verify_time` &lt;=#{verifyTime}) GROUP BY a.seller_name
+	UNION ALL
+	SELECT a.person_agent_id AS CODE, ROUND(SUM(a.person_agent_profit),2) AS amount, 2 AS TYPE FROM ecm_mzf_shareprofit a  INNER JOIN ecm_mzf_order_status b 
+	  ON a.`order_sn` = b.`order_sn` WHERE b.`bill_status` = 1   AND b.`share_status` = 1 AND (b.`verify_time`&gt;0 AND b.`verify_time` &lt;=#{verifyTime}) GROUP BY a.person_agent_id
+	UNION ALL
+	SELECT a.area_agent_id AS CODE, ROUND(SUM(a.area_agent_profit),2) AS amount, 3 AS TYPE FROM ecm_mzf_shareprofit a INNER JOIN ecm_mzf_order_status b 
+	  ON a.`order_sn` = b.`order_sn` WHERE b.`bill_status` = 1   AND b.`share_status` = 1 AND (b.`verify_time`&gt;0 AND b.`verify_time` &lt;=#{verifyTime}) GROUP BY a.area_agent_id
+	UNION ALL 
+	SELECT a.outarea_agent_id AS CODE, ROUND(SUM(a.outarea_agent_profit),2) AS amount, 4 AS TYPE FROM ecm_mzf_shareprofit a INNER JOIN ecm_mzf_order_status b
+ 	 ON a.`order_sn` = b.`order_sn` WHERE b.`bill_status` = 1  AND b.`share_status` = 1 AND (b.`verify_time`&gt;0 AND b.`verify_time` &lt;=#{verifyTime}) GROUP BY a.outarea_agent_id
+	</select>
+	
+	<!-- keep-->
+	<select id="queryOrderToBilled"  resultType="com.meiduimall.service.settlement.vo.OrderToBilledVO" parameterType="java.lang.Long">
+		SELECT a.seller_name AS CODE, a.order_sn AS orderSn, 1 AS type FROM ecm_mzf_shareprofit a INNER JOIN ecm_mzf_order_status b 
+		  ON a.`order_sn` = b.`order_sn` WHERE b.`bill_status` = 1  AND b.`share_status` = 1 AND (b.`verify_time`&gt;0 AND b.`verify_time` &lt;=#{verifyTime}) 
+		UNION ALL
+		SELECT a.person_agent_id AS CODE, a.order_sn AS orderSn, 2 AS type FROM ecm_mzf_shareprofit a  INNER JOIN ecm_mzf_order_status b 
+		  ON a.`order_sn` = b.`order_sn` WHERE b.`bill_status` = 1   AND b.`share_status` = 1 AND (b.`verify_time`&gt;0 AND b.`verify_time` &lt;=#{verifyTime}) 
+		UNION ALL
+		SELECT a.area_agent_id AS CODE, a.order_sn AS orderSn, 3 AS type FROM ecm_mzf_shareprofit a INNER JOIN ecm_mzf_order_status b 
+		  ON a.`order_sn` = b.`order_sn` WHERE b.`bill_status` = 1   AND b.`share_status` = 1 AND (b.`verify_time`&gt;0 AND b.`verify_time` &lt;=#{verifyTime}) 
+		UNION ALL 
+		SELECT a.outarea_agent_id AS CODE, a.order_sn AS orderSn, 4 AS type FROM ecm_mzf_shareprofit a INNER JOIN ecm_mzf_order_status b
+	 	 ON a.`order_sn` = b.`order_sn` WHERE b.`bill_status` = 1  AND b.`share_status` = 1 AND (b.`verify_time`&gt;0 AND b.`verify_time` &lt;=#{verifyTime}) 
+	</select>
+
+	<!-- 生成账单 keep-->
+	<insert id="createBillWater" parameterType="EcmMzfBillWater">
+		INSERT INTO ecm_mzf_bill_water(bill_id,code,amount,type,bill_date,add_date)
+		VALUES (
+			#{billId}, #{code}, #{amount}, #{type}, #{billTime},#{billAddTime}
+		)
+	</insert>
+    
+    <!-- keep-->
+    <update id="updateOrderBillIdByType" parameterType="com.meiduimall.service.settlement.vo.OrderToBilledVO">
+	    UPDATE ecm_mzf_bill_water bw SET bw.`order_sn`=#{orderSn} WHERE bw.`bill_id`=#{billId}
+    </update>
+    
+     <!-- keep-->
+    <update id="createBillAndOrderMapping" parameterType="com.meiduimall.service.settlement.vo.OrderToBilledVO">
+		INSERT INTO ecm_mzf_bill_water_order(bill_id,order_sn) VALUES(#{billId},#{orderSn});
+    </update>
+    
+    <select id="querytotalprofit" resultType="com.meiduimall.service.settlement.vo.ShareProfitVO">
+    	SELECT bw.code,SUM(amount) AS totalProfit FROM `ecm_mzf_bill_water` bw WHERE bw.code IN 
+    	 <foreach item="code" index="index" collection="codes" open="(" separator="," close=")">  
+			#{code}  
+		</foreach>
+		<if test="billStartDate != null">
+			AND UNIX_TIMESTAMP(bw.`bill_date`) &gt;=#{billStartDate}
+		</if>
+		<if test="billEndDate != null">
+			AND UNIX_TIMESTAMP(bw.`bill_date`) &lt;=#{billEndDate}
+		</if>
+    	GROUP BY bw.code
+    </select>
+	
+
+</mapper>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--会员账户表ms_account相关操作 -->
+<mapper namespace="MemberTransferHistoryMapper" >
+
+<!--根据cityid查询对应的地址信息-->
+	<insert id="saveMemberTransferHistory" parameterType="com.meiduimall.service.member.model.MemberTransferHistory">
+	  insert into  ms_member_transfer_history
+		(mth_id,
+		mem_id,
+		dict_mth_category,
+		dict_mth_status,
+		mth_no,
+		mth_quantity,
+		mth_actual_quantity,
+		dict_charge_formula,
+		mth_wallet_url,
+		mth_other_no,
+		mth_created_by,
+		mth_created_date,
+		mth_updated_by,
+		mth_updated_date,
+		mth_remark,
+		mth_quantity_left,
+		mth_account,
+		internal_transfer_type,
+		transin_member_nickname)
+		VALUES
+       (
+        #{mthId},
+		#{memId},
+		#{dictMthCategory},
+		#{dictMthStatus},
+		#{mthNo},
+		#{mthQuantity},
+		#{mthActualQuantity},
+		#{dictChargeFormula},
+		#{mthWalletUrl},
+		#{mthOtherNo},
+		#{mthCreatedBy},
+		#{mthCreatedDate},
+		#{mthUpdatedBy},
+		#{mthUpdatedDate},
+		#{mthRemark},
+		#{mthQuantityLeft},
+		#{mthAccount},
+		#{internalTransferType},
+		#{transInMemberNickName}
+       )
+
+	</insert>
+	
+</mapper>

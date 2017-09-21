@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CreateBillLogMapper">
+	
+	<!-- 新增保证金分润流水（金额或积分） -->
+	<insert id="saveCreateBillLog" parameterType="CreateBillLog" >
+		insert into ecm_mzf_log_createbill(reason,created_date,remark) 
+		values
+		(#{reason},#{createdDate},#{remark})
+	</insert>
+
+</mapper>

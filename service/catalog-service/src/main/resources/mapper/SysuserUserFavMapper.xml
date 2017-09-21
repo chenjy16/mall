@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="SysuserUserFavMapper" >
+  <resultMap id="BaseResultMap" type="com.meiduimall.service.catalog.entity.SysuserUserFav" >
+    <id column="gnotify_id" property="gnotifyId" jdbcType="INTEGER" />
+    <result column="item_id" property="itemId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="sku_id" property="skuId" jdbcType="INTEGER" />
+    <result column="cat_id" property="catId" jdbcType="INTEGER" />
+    <result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+    <result column="goods_price" property="goodsPrice" jdbcType="DECIMAL" />
+    <result column="image_default_id" property="imageDefaultId" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="cellphone" property="cellphone" jdbcType="VARCHAR" />
+    <result column="send_time" property="sendTime" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="INTEGER" />
+    <result column="disabled" property="disabled" jdbcType="INTEGER" />
+    <result column="object_type" property="objectType" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="ResultMapWithBLOBs" type="com.meiduimall.service.catalog.entity.SysuserUserFav" extends="BaseResultMap" >
+    <result column="remark" property="remark" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  
+  <sql id="Base_Column_List" >
+    gnotify_id, item_id, user_id, sku_id, cat_id, goods_name, goods_price, image_default_id, 
+    email, cellphone, send_time, create_time, disabled, object_type
+  </sql>
+  
+  <sql id="Blob_Column_List" >
+    remark
+  </sql>
+  
+  <!-- 根据token和item_id，查找该用户是否收藏了该商品 -->
+  <select id="selectCountByItemIdAndMemId" resultType="int" parameterType="com.meiduimall.service.catalog.entity.IdAndMemId">
+  	SELECT count(*) FROM sysuser_user_fav 
+  	WHERE 
+  	user_id=(SELECT user_id FROM sysuser_account WHERE mem_id=#{memId}) 
+  	AND 
+  	item_id=#{id};
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    * 
+    from sysuser_user_fav
+    where gnotify_id = #{gnotifyId,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from sysuser_user_fav
+    where gnotify_id = #{gnotifyId,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.meiduimall.service.catalog.entity.SysuserUserFav" >
+    insert into sysuser_user_fav (gnotify_id, item_id, user_id, 
+      sku_id, cat_id, goods_name, 
+      goods_price, image_default_id, email, 
+      cellphone, send_time, create_time, 
+      disabled, object_type, remark
+      )
+    values (#{gnotifyId,jdbcType=INTEGER}, #{itemId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
+      #{skuId,jdbcType=INTEGER}, #{catId,jdbcType=INTEGER}, #{goodsName,jdbcType=VARCHAR}, 
+      #{goodsPrice,jdbcType=DECIMAL}, #{imageDefaultId,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{cellphone,jdbcType=VARCHAR}, #{sendTime,jdbcType=INTEGER}, #{createTime,jdbcType=INTEGER}, 
+      #{disabled,jdbcType=INTEGER}, #{objectType,jdbcType=VARCHAR}, #{remark,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.meiduimall.service.catalog.entity.SysuserUserFav" >
+    insert into sysuser_user_fav
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="gnotifyId != null" >
+        gnotify_id,
+      </if>
+      <if test="itemId != null" >
+        item_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="skuId != null" >
+        sku_id,
+      </if>
+      <if test="catId != null" >
+        cat_id,
+      </if>
+      <if test="goodsName != null" >
+        goods_name,
+      </if>
+      <if test="goodsPrice != null" >
+        goods_price,
+      </if>
+      <if test="imageDefaultId != null" >
+        image_default_id,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="cellphone != null" >
+        cellphone,
+      </if>
+      <if test="sendTime != null" >
+        send_time,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="disabled != null" >
+        disabled,
+      </if>
+      <if test="objectType != null" >
+        object_type,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="gnotifyId != null" >
+        #{gnotifyId,jdbcType=INTEGER},
+      </if>
+      <if test="itemId != null" >
+        #{itemId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="skuId != null" >
+        #{skuId,jdbcType=INTEGER},
+      </if>
+      <if test="catId != null" >
+        #{catId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsName != null" >
+        #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsPrice != null" >
+        #{goodsPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="imageDefaultId != null" >
+        #{imageDefaultId,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="cellphone != null" >
+        #{cellphone,jdbcType=VARCHAR},
+      </if>
+      <if test="sendTime != null" >
+        #{sendTime,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=INTEGER},
+      </if>
+      <if test="disabled != null" >
+        #{disabled,jdbcType=INTEGER},
+      </if>
+      <if test="objectType != null" >
+        #{objectType,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.meiduimall.service.catalog.entity.SysuserUserFav" >
+    update sysuser_user_fav
+    <set >
+      <if test="itemId != null" >
+        item_id = #{itemId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="skuId != null" >
+        sku_id = #{skuId,jdbcType=INTEGER},
+      </if>
+      <if test="catId != null" >
+        cat_id = #{catId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsName != null" >
+        goods_name = #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsPrice != null" >
+        goods_price = #{goodsPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="imageDefaultId != null" >
+        image_default_id = #{imageDefaultId,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="cellphone != null" >
+        cellphone = #{cellphone,jdbcType=VARCHAR},
+      </if>
+      <if test="sendTime != null" >
+        send_time = #{sendTime,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=INTEGER},
+      </if>
+      <if test="disabled != null" >
+        disabled = #{disabled,jdbcType=INTEGER},
+      </if>
+      <if test="objectType != null" >
+        object_type = #{objectType,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where gnotify_id = #{gnotifyId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.meiduimall.service.catalog.entity.SysuserUserFav" >
+    update sysuser_user_fav
+    set item_id = #{itemId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      sku_id = #{skuId,jdbcType=INTEGER},
+      cat_id = #{catId,jdbcType=INTEGER},
+      goods_name = #{goodsName,jdbcType=VARCHAR},
+      goods_price = #{goodsPrice,jdbcType=DECIMAL},
+      image_default_id = #{imageDefaultId,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      cellphone = #{cellphone,jdbcType=VARCHAR},
+      send_time = #{sendTime,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=INTEGER},
+      disabled = #{disabled,jdbcType=INTEGER},
+      object_type = #{objectType,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=LONGVARCHAR}
+    where gnotify_id = #{gnotifyId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.meiduimall.service.catalog.entity.SysuserUserFav" >
+    update sysuser_user_fav
+    set item_id = #{itemId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      sku_id = #{skuId,jdbcType=INTEGER},
+      cat_id = #{catId,jdbcType=INTEGER},
+      goods_name = #{goodsName,jdbcType=VARCHAR},
+      goods_price = #{goodsPrice,jdbcType=DECIMAL},
+      image_default_id = #{imageDefaultId,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      cellphone = #{cellphone,jdbcType=VARCHAR},
+      send_time = #{sendTime,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=INTEGER},
+      disabled = #{disabled,jdbcType=INTEGER},
+      object_type = #{objectType,jdbcType=VARCHAR}
+    where gnotify_id = #{gnotifyId,jdbcType=INTEGER}
+  </update>
+</mapper>

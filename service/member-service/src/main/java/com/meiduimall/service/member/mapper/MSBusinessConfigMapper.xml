@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--系统配置字典表ms_business_config相关操作 -->
+<mapper namespace="MSBusinessConfigMapper">
+
+<!--查询系统配置字典父节点-->
+	<select id="queryBusinessConfigListParent" resultType="com.meiduimall.service.member.model.MSBusinessConfig">
+	SELECT c.`bc_id` AS bcId,c.`bc_value1` AS bcValue1 FROM ms_business_config c WHERE c.`bc_parent_id`='00000000-0000-0000-0000-000000000000' AND c.'bc_no'>=8 AND c.'bc_no'>=12
+	</select>
+	
+	<!--查询排序相关的系统设置父节点-->
+	<!-- <select id="queryRankBusinessConfigListParent" resultType="com.meiduimall.service.member.model.MSBusinessConfig" >
+	SELECT c.`bc_id` AS bcId,c.`bc_value1` AS bcValue1 FROM ms_business_config c WHEREc.`bc_parent_id`='00000000-0000-0000-0000-000000000000' AND c.'bc_no'>=1 AND c.'bc_no'>=7
+	</select> -->
+	
+	<!--查询系统配置字典子节点(公用)-->
+	<!-- <select id="queryBusinessConfigListSon" resultType="com.meiduimall.service.member.model.MSBusinessConfig" parameterType="java.lang.String">
+	SELECT c.`bc_id` AS bcId,c.`bc_value1` AS bcValue1 FROM ms_business_config c WHERE c.`bc_parent_id`=#{bcId}
+	</select> -->
+	
+</mapper>

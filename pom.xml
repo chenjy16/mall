@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.meiduimall</groupId>
+    <artifactId>mall</artifactId>
+    <name>mall</name>
+    <packaging>pom</packaging>
+    <version>1.0.1-SNAPSHOT</version>
+    <modules>
+        <module>support</module>
+        <module>platform</module>
+        <module>starter</module>
+        <module>service</module>
+        <module>application</module>
+    </modules>
+
+    <properties>
+        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+        <sonar.jacoco.reportPath>${project.basedir}/target/jacoco.exec</sonar.jacoco.reportPath>
+        <sonar.language>java</sonar.language>
+        <jacoco.version>0.7.9</jacoco.version>
+    </properties>
+<!--     <scm>
+        <connection>scm:git:http://git.meiduimall.com/service/meiduimall.git</connection>
+        <developerConnection>scm:git:http://git.meiduimall.com/service/meiduimall.git</developerConnection>
+        <url>http://git.meiduimall.com/service/meiduimall/tree/develop</url>
+        <tag>mall-1.0.2</tag>
+      <tag>mall-1.0.0</tag>
+  </scm> -->
+
+    <profiles>
+        <profile>
+            <id>sonar</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <!-- Optional URL to server. Default value is http://localhost:9000 -->
+                <sonar.skip>false</sonar.skip>
+                <sonar.login>585d3c279f2c4d629f4cf9e4e577a626bd3a3993</sonar.login>
+                <sonar.host.url>http://139.224.55.133:9000</sonar.host.url>
+            </properties>
+        </profile>
+    </profiles>
+
+    <distributionManagement>
+        <repository>
+            <id>maven-releases</id>
+            <name>maven-releases</name>
+            <url>http://maven.meiduimall.com/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>maven-snapshots</id>
+            <name>maven-snapshots</name>
+            <url>http://maven.meiduimall.com/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+
+    <repositories>
+        <repository>
+            <id>maven-public</id>
+            <name>maven-public</name>
+            <url>http://maven.meiduimall.com/repository/maven-public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>maven-public</id>
+            <name>maven-public</name>
+            <url>http://maven.meiduimall.com/repository/maven-public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <configuration>
+                    <destFile>${sonar.jacoco.reportPath}</destFile>
+                    <append>true</append>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <providerImplementations>
+                        <git>jgit</git>
+                    </providerImplementations>
+                    <username></username>
+                    <password></password>
+                    <tagBase>${project.artifactId}-${project.version}</tagBase>
+                    <goals>-f pom.xml deploy</goals>
+                </configuration>
+                <dependencies>
+                    https://mvnrepository.com/artifact/org.apache.maven.scm/maven-scm-provider-jgit
+                    <dependency>
+                        <groupId>org.apache.maven.scm</groupId>
+                        <artifactId>maven-scm-provider-jgit</artifactId>
+                        <version>1.9.5</version>
+                    </dependency>
+                </dependencies>
+            </plugin> -->
+        </plugins>
+    </build>
+</project>

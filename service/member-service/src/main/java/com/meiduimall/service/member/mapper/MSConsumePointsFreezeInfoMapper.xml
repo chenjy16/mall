@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 会员积分冻结解冻记录表相关操作 -->
+<mapper namespace="MSConsumePointsFreezeInfoMapper">
+	
+	<!-- 根据memid查询冻结解冻的积分总额  上面的要删掉-->
+	<select id="getSumConsumePointsByMemId" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT  
+		SUM(m.mcpf_consume_points) 
+		FROM ms_consume_points_freeze_info AS m
+		WHERE mem_id=#{memId} 
+		GROUP BY mem_id
+	</select>
+	
+	<!-- 根据orderid查询冻结解冻记录 -->
+	<select id="getFreezeInfoByOrderId" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT a.mcpf_consume_points FROM ms_consume_points_freeze_info a WHERE a.mcpf_order_id=#{orderid}
+	</select>
+	
+		<!-- 插入积分冻结解冻记录 -->
+	<insert id="insertFreezRecord" parameterType="com.meiduimall.service.member.model.response.MemberConsumeMessageDTO">
+		INSERT INTO ms_consume_points_freeze_info 
+		VALUES(
+		#{mcpf_id},
+		#{memId},
+		#{order_id},
+		#{freeType},
+		#{consume_points_count},
+		#{mcpfConsumePointsBalance},
+		#{mcpfCreatedBy},
+		#{mcpfCreatedDate},
+		#{mcpfUpdatedBy},
+		#{mcpfUpdatedDate},
+		#{mcpfRemark}
+		)
+	</insert>
+</mapper>

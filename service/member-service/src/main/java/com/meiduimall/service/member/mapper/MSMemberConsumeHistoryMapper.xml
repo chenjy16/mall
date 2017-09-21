@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 会员消费记录表相关操作 -->
+<mapper namespace="MSMemberConsumeHistoryMapper">
+<!-- 根据订单号、订单来源、订单状态查询消费记录表的记录条数-->
+	<select id="getCountByOrderIdAndSourceAndStatus" parameterType="com.meiduimall.service.member.model.response.MemberConsumeMessageDTO" resultType="java.lang.Integer">
+		select count(a.`mch_id`) from ms_member_consume_history a 
+		where a.`order_id`=#{order_id} and a.`mch_orgin_type`=#{order_source} and a.`mch_status`=#{mch_status}
+	</select>
+	
+	<!--添加会员消费记录-->
+	<select id="insertMemberConsumeHistory" parameterType="com.meiduimall.service.member.model.response.MemberConsumeMessageDTO">
+	INSERT INTO ms_member_consume_history (
+	mch_id,
+	mem_id,
+	order_id,
+	mch_money,
+	mch_product_name,
+	mch_bshop_give_integral,
+	mch_orgin_category,
+	mch_pay_type,
+	mch_consume_points_count,
+	mch_status,
+	mch_created_date
+	) 
+	VALUES (
+	#{mcp_id},
+	#{memId},
+	#{order_id},
+	#{consumer_money},
+	#{product_name},
+	#{back_integral},
+	#{order_source},
+	#{pay_type},
+	#{consume_points_count},
+	#{mch_status},
+	#{mcpfCreatedDate}
+	)
+	</select>
+</mapper>

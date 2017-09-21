@@ -1,0 +1,18 @@
+# Spring Properties
+spring:
+  application:
+     name: payment-service
+     
+server:
+  port: 10081
+
+
+  
+# mybatis-config
+mybatis :
+  mapper-locations : classpath:com/meiduimall/payment/mapper/*Mapper.xml 
+  
+
+
+  
+ 

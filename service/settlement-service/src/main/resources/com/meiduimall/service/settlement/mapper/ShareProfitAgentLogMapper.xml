@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ShareProfitAgentLogMapper">
+
+	<!-- 新增保证金分润异常日志 -->
+	<insert id="insertShareProfitAgentLog" parameterType="ShareProfitAgentLog">
+		INSERT INTO ecm_mzf_log_shareprofit_agent (
+		  agent_no,
+		  phone,
+		  reason,
+		  created_date,
+		  retry_status,
+		  retry_time,
+		  retry_flag,
+		  remark,
+		  updated_date
+		) 
+		VALUES
+		  (
+		   #{agentNo},
+		   #{phone},
+		   #{reason},
+		   #{createdDate},
+		   #{retryStatus},
+		   #{retryTime},
+		   #{retryFlag},
+		   #{remark},
+		   #{updatedDate}
+		  )
+	</insert>
+	
+	<!-- 重试失败   修改重试标识为 不需要重试0 -->
+	<update id="updateRetryFlag" parameterType="java.lang.String">
+		UPDATE 
+		  ecm_mzf_log_shareprofit_agent 
+		SET
+		  retry_flag = 0 
+		WHERE agent_no = #{agentNo} 
+		  AND retry_flag = 1 
+	</update>
+	
+	<!-- 重试成功   修改重试标识 -->
+	<update id="updateStatusFlag" parameterType="java.lang.String">
+		UPDATE 
+		  ecm_mzf_log_shareprofit_agent 
+		SET
+		  retry_flag = 0,
+		  retry_status = 1 
+		WHERE agent_no = #{agentNo} 
+	</update>
+	
+	<!-- 个代保证金分润重试机制  5分钟 、30分钟、12小时-->
+	<select id="getAgentsRetry" parameterType="java.util.Map" resultType="ShareProfitAgentLog">
+		SELECT 
+		  id,
+		  agent_no agentNo,
+		  phone,
+		  reason,
+		  created_date createdDate,
+		  retry_status retryStatus,
+		  retry_time retryTime,
+		  retry_flag retryFlag,
+		  remark,
+		  updated_date updatedDate 
+		FROM
+		  ecm_mzf_log_shareprofit_agent 
+		WHERE retry_status = 0 AND retry_flag = 1 
+		
+		<if test='key=="share5MinRetry"'>
+			AND (#{currentTimestamp}-created_date) &gt;= 300 and (#{currentTimestamp} - created_date) &lt;=900
+		</if>
+		
+		<if test='key=="share30MinRetry"'>
+			AND (#{currentTimestamp}-created_date) &gt;= 1800 and (#{currentTimestamp} - created_date) &lt;=2400
+		</if>
+		
+		<if test='key=="share12HoursRetry"'>
+			AND (#{currentTimestamp}-created_date) &gt;= 43200 and (#{currentTimestamp} - created_date) &lt;=43800
+		</if>
+		  
+	</select>
+
+</mapper>

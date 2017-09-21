@@ -1,0 +1,145 @@
+---
+spring:
+  profiles: dev
+# HikariConfig
+  datasource :
+    type : com.zaxxer.hikari.HikariDataSource
+    driver-class-name : com.mysql.jdbc.Driver
+    url : jdbc:mysql://192.168.4.236:3306/sms_service?characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&allowMultiQueries=true
+    username : root
+    password : meidui@2016.?!
+    connectionTimeout : 30000
+    idleTimeout : 600000
+    maxLifetime : 1800000
+    maximumPoolSize : 300
+    minimumIdle : 10
+    autoCommit : true;
+    connectionTestQuery : SELECT 1
+# 注册中心
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://192.168.4.240:9001/eureka/
+  instance:
+    hostname: 192.168.4.240  
+# redis
+config:
+  jedis:
+    jedisShardInfo:
+      host: 192.168.4.236
+      port: 6379
+      password: meiduiredis2016
+      database: 15
+    maxTotal: 1024
+    maxIdle: 250
+    maxWaitMillis: 2000
+    testOnBorrow: true
+    testOnReturn: true
+# 阿里大于短信发送API参数
+aliyun : 
+  appKey : 23438487
+  appSecret : 17042e86f2ad304b016d4ed1578f26e7
+  url : http://localhost:9901/aliyun/test
+  signName : 美兑壹购物
+# 漫道短信发送API参数
+zucpUrl: http://localhost:9902/mandao/test
+zucpUser: SDK-WSS-010-09798
+zucpPasswd: a-9[60-[
+
+
+---
+spring:
+  profiles: pro
+# HikariConfig
+  datasource :
+    type : com.zaxxer.hikari.HikariDataSource
+    driver-class-name : com.mysql.jdbc.Driver
+    url : jdbc:mysql://127.0.0.1:3306/smm_service?characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&allowMultiQueries=true
+    username : root
+    password : 123456
+    connectionTimeout : 30000
+    idleTimeout : 600000
+    maxLifetime : 1800000
+    maximumPoolSize : 300
+    minimumIdle : 10
+    autoCommit : true;
+    connectionTestQuery : SELECT 1
+# 注册中心
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://10.116.21.93:9001/eureka/
+  instance:
+     hostname: 10.116.21.93
+# redis
+config:
+  jedis:
+    jedisShardInfo:
+      host: 192.168.4.236
+      port: 6379
+      password: meiduiredis2016
+      database: 15
+    maxTotal: 1024
+    maxIdle: 250
+    maxWaitMillis: 2000
+    testOnBorrow: true
+    testOnReturn: true
+# 阿里大于短信发送API参数
+aliyun : 
+  appKey : 23438487
+  appSecret : 17042e86f2ad304b016d4ed1578f26e7
+  url : http://gw.api.taobao.com/router/rest
+  signName : 美兑壹购物
+# 漫道短信发送API参数
+zucpUrl: http://sdk.entinfo.cn:8060/webservice.asmx
+zucpUser: SDK-WSS-010-09798
+zucpPasswd: a-9[60-[
+
+
+---  
+spring:
+  profiles: test
+# HikariConfig
+  datasource :
+    type : com.zaxxer.hikari.HikariDataSource
+    driver-class-name : com.mysql.jdbc.Driver
+    url : jdbc:mysql://192.168.4.110:3306/sms_service?characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&allowMultiQueries=true
+    username : meidui
+    password : meiduishop
+    connectionTimeout : 30000
+    idleTimeout : 600000
+    maxLifetime : 1800000
+    maximumPoolSize : 300
+    minimumIdle : 10
+    autoCommit : true;
+    connectionTestQuery : SELECT 1
+# 注册中心
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://192.168.4.111:9001/eureka/
+  instance:
+     hostname: 192.168.4.111  
+# redis
+config:
+  jedis:
+    jedisShardInfo:
+      host: 192.168.4.110
+      port: 6379
+      password: meiduiredis2017
+      database: 15
+    maxTotal: 1024
+    maxIdle: 250
+    maxWaitMillis: 2000
+    testOnBorrow: true
+    testOnReturn: true
+# 阿里大于短信发送API参数
+aliyun : 
+  appKey : 23438487
+  appSecret : 17042e86f2ad304b016d4ed1578f26e7
+  url : http://gw.api.taobao.com/router/rest
+  signName : 美兑壹购物
+# 漫道短信发送API参数
+zucpUrl: http://sdk.entinfo.cn:8060/webservice.asmx
+zucpUser: SDK-WSS-010-09798
+zucpPasswd: a-9[60-[

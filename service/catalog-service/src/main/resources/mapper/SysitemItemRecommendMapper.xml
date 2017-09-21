@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="SysitemItemRecommendMapper" >
+
+  <!-- resultMap定义区域 -->
+  <resultMap id="BaseResultMap" type="com.meiduimall.service.catalog.entity.SysitemItemRecommend" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="item_id" property="itemId" jdbcType="INTEGER" />
+    <result column="reco_time" property="recoTime" jdbcType="TIMESTAMP" />
+    <result column="reco_level" property="recoLevel" jdbcType="INTEGER" />
+    <result column="reco_type" property="recoType" jdbcType="INTEGER" />
+    <result column="opt_user" property="optUser" jdbcType="VARCHAR" />
+    <result column="ip" property="ip" jdbcType="VARCHAR" />
+    <result column="curr_time" property="currTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.meiduimall.service.catalog.entity.SysitemItemRecommend" extends="BaseResultMap" >
+    <result column="reco_desc" property="recoDesc" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+  
+  <!-- sql片段定义区域 -->
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  
+  <sql id="Base_Column_List" >
+    id, item_id, reco_time, reco_level, reco_type, opt_user, ip, curr_time
+  </sql>
+  
+  <sql id="Blob_Column_List" >
+    reco_desc
+  </sql>
+  
+  
+  <!-- 查询语句 -->
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    * 
+    from sysitem_item_recommend
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectLastRecordByType" parameterType="int" resultType="java.lang.Integer">
+  	select item_id from sysitem_item_recommend where reco_type = #{type} order by id desc limit 0,4;
+  </select>
+  
+  
+  <!-- 删除语句 -->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from sysitem_item_recommend
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 插入语句 -->
+  <insert id="insert" parameterType="com.meiduimall.service.catalog.entity.SysitemItemRecommend" >
+    insert into sysitem_item_recommend (id, item_id, reco_time, 
+      reco_level, reco_type, opt_user, 
+      ip, curr_time, reco_desc
+      )
+    values (#{id,jdbcType=INTEGER}, #{itemId,jdbcType=INTEGER}, #{recoTime,jdbcType=TIMESTAMP}, 
+      #{recoLevel,jdbcType=INTEGER}, #{recoType,jdbcType=INTEGER}, #{optUser,jdbcType=VARCHAR}, 
+      #{ip,jdbcType=VARCHAR}, #{currTime,jdbcType=TIMESTAMP}, #{recoDesc,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  
+  <insert id="insertBatch" parameterType="java.util.List">
+    insert into sysitem_item_recommend (id, item_id, reco_time, 
+      reco_level, reco_type, opt_user, 
+      ip, curr_time, reco_desc
+      )
+    values 
+    <foreach collection="list" item="item" index="index" separator="," >
+    (#{item.id,jdbcType=INTEGER}, #{item.itemId,jdbcType=INTEGER}, #{item.recoTime,jdbcType=TIMESTAMP}, 
+      #{item.recoLevel,jdbcType=INTEGER}, #{item.recoType,jdbcType=INTEGER}, #{item.optUser,jdbcType=VARCHAR}, 
+      #{item.ip,jdbcType=VARCHAR}, #{item.currTime,jdbcType=TIMESTAMP}, #{item.recoDesc,jdbcType=LONGVARCHAR}
+      )
+    </foreach>
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.meiduimall.service.catalog.entity.SysitemItemRecommend" >
+    insert into sysitem_item_recommend
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="itemId != null" >
+        item_id,
+      </if>
+      <if test="recoTime != null" >
+        reco_time,
+      </if>
+      <if test="recoLevel != null" >
+        reco_level,
+      </if>
+      <if test="recoType != null" >
+        reco_type,
+      </if>
+      <if test="optUser != null" >
+        opt_user,
+      </if>
+      <if test="ip != null" >
+        ip,
+      </if>
+      <if test="currTime != null" >
+        curr_time,
+      </if>
+      <if test="recoDesc != null" >
+        reco_desc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="itemId != null" >
+        #{itemId,jdbcType=INTEGER},
+      </if>
+      <if test="recoTime != null" >
+        #{recoTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recoLevel != null" >
+        #{recoLevel,jdbcType=INTEGER},
+      </if>
+      <if test="recoType != null" >
+        #{recoType,jdbcType=INTEGER},
+      </if>
+      <if test="optUser != null" >
+        #{optUser,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null" >
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="currTime != null" >
+        #{currTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recoDesc != null" >
+        #{recoDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  <!-- 更新语句 -->
+  <update id="updateByPrimaryKeySelective" parameterType="com.meiduimall.service.catalog.entity.SysitemItemRecommend" >
+    update sysitem_item_recommend
+    <set >
+      <if test="itemId != null" >
+        item_id = #{itemId,jdbcType=INTEGER},
+      </if>
+      <if test="recoTime != null" >
+        reco_time = #{recoTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recoLevel != null" >
+        reco_level = #{recoLevel,jdbcType=INTEGER},
+      </if>
+      <if test="recoType != null" >
+        reco_type = #{recoType,jdbcType=INTEGER},
+      </if>
+      <if test="optUser != null" >
+        opt_user = #{optUser,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null" >
+        ip = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="currTime != null" >
+        curr_time = #{currTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recoDesc != null" >
+        reco_desc = #{recoDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.meiduimall.service.catalog.entity.SysitemItemRecommend" >
+    update sysitem_item_recommend
+    set item_id = #{itemId,jdbcType=INTEGER},
+      reco_time = #{recoTime,jdbcType=TIMESTAMP},
+      reco_level = #{recoLevel,jdbcType=INTEGER},
+      reco_type = #{recoType,jdbcType=INTEGER},
+      opt_user = #{optUser,jdbcType=VARCHAR},
+      ip = #{ip,jdbcType=VARCHAR},
+      curr_time = #{currTime,jdbcType=TIMESTAMP},
+      reco_desc = #{recoDesc,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.meiduimall.service.catalog.entity.SysitemItemRecommend" >
+    update sysitem_item_recommend
+    set item_id = #{itemId,jdbcType=INTEGER},
+      reco_time = #{recoTime,jdbcType=TIMESTAMP},
+      reco_level = #{recoLevel,jdbcType=INTEGER},
+      reco_type = #{recoType,jdbcType=INTEGER},
+      opt_user = #{optUser,jdbcType=VARCHAR},
+      ip = #{ip,jdbcType=VARCHAR},
+      curr_time = #{currTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

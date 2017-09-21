@@ -1,0 +1,25 @@
+# Spring Properties
+spring:
+  application:
+     name: settlement-service
+#  cloud:
+#    config:
+#      failFast: true
+#      label: master
+#      discovery:
+#        enabled: true
+#        serviceId: service-config
+#    rabbitmq:
+#      host: 192.168.4.240
+#      port: 5672
+#      username: admin
+#      password: admin123
+    
+# HTTP Server
+server:
+  port: 10020
+  
+  
+
+  
+ 

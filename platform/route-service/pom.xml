@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>platform</artifactId>
+        <groupId>com.meiduimall</groupId>
+        <version>1.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.meiduimall.platform</groupId>
+    <artifactId>route-service</artifactId>
+    <name>platform::route-service</name>
+    <version>1.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-zuul</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+			<groupId>com.meiduimall</groupId>
+			<artifactId>meiduimall-support-core</artifactId>
+			<version>${meiduimall-support-core.version}</version>
+		</dependency>
+		 <dependency>
+            <groupId>com.meiduimall</groupId>
+            <artifactId>meiduimall-support-redis</artifactId>
+            <version>${meiduimall-support-redis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.meiduimall</groupId>
+            <artifactId>meiduimall-support-security</artifactId>
+            <version>${meiduimall-support-security.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+               	 <configuration>  
+				    <mainClass>com.meiduimall.platform.route.RouterServiceApplication</mainClass>
+			    </configuration>  
+            </plugin>
+        </plugins>
+    </build>
+
+   
+</project>

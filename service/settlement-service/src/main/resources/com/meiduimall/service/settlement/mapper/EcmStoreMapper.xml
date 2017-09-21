@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EcmStoreMapper">
+
+	<!-- 插入商家送积分记录 -->
+	<insert id="insertStoreRecord" parameterType="EcmMzfStoreRecord">
+		INSERT INTO ecm_mzf_store_record (
+		  created_date,
+		  updated_date,
+		  store_no,
+		  phone,
+		  score,
+		  score_status
+		) 
+		VALUES
+		  (
+		    #{createdDate},
+		    #{updatedDate},
+		    #{storeNo},
+		    #{phone},
+		    #{score},
+		    #{scoreStatus}
+		  )
+	</insert>
+	
+</mapper>

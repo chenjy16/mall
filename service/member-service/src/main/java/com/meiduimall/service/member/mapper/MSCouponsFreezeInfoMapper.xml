@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MSCouponsFreezeInfoMapper">
+<!-- 根据memId 查询冻结和解冻的金额 -->
+	<select id="getMcfiMoneyByUserId" parameterType="java.lang.String" resultType="java.lang.Double">
+		SELECT SUM(m.`mcfi_money`) FROM  ms_coupons_freeze_info m  WHERE mem_id =#{memid} GROUP BY mem_id 
+	</select>
+</mapper>

@@ -1,0 +1,833 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="SysitemItemMapper">
+
+	<resultMap id="BaseResultMap"
+		type="com.meiduimall.service.catalog.entity.SysitemItem">
+		<id column="item_id" property="itemId" jdbcType="INTEGER" />
+		<result column="shop_id" property="shopId" jdbcType="INTEGER" />
+		<result column="cat_id" property="catId" jdbcType="INTEGER" />
+		<result column="brand_id" property="brandId" jdbcType="INTEGER" />
+		<result column="shop_cat_id" property="shopCatId" jdbcType="VARCHAR" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="sub_title" property="subTitle" jdbcType="VARCHAR" />
+		<result column="bn" property="bn" jdbcType="VARCHAR" />
+		<result column="price" property="price" jdbcType="DECIMAL" />
+		<result column="cost_price" property="costPrice" jdbcType="DECIMAL" />
+		<result column="mkt_price" property="mktPrice" jdbcType="DECIMAL" />
+		<result column="weight" property="weight" jdbcType="DECIMAL" />
+		<result column="image_default_id" property="imageDefaultId"
+			jdbcType="VARCHAR" />
+		<result column="store" property="store" jdbcType="INTEGER" />
+		<result column="freez" property="freez" jdbcType="INTEGER" />
+		<result column="order_sort" property="orderSort" jdbcType="INTEGER" />
+		<result column="modified_time" property="modifiedTime"
+			jdbcType="INTEGER" />
+		<result column="has_discount" property="hasDiscount" jdbcType="INTEGER" />
+		<result column="is_virtual" property="isVirtual" jdbcType="INTEGER" />
+		<result column="is_timing" property="isTiming" jdbcType="INTEGER" />
+		<result column="violation" property="violation" jdbcType="INTEGER" />
+		<result column="is_selfshop" property="isSelfshop" jdbcType="INTEGER" />
+		<result column="nospec" property="nospec" jdbcType="INTEGER" />
+		<result column="sub_stock" property="subStock" jdbcType="INTEGER" />
+		<result column="outer_id" property="outerId" jdbcType="VARCHAR" />
+		<result column="is_offline" property="isOffline" jdbcType="INTEGER" />
+		<result column="barcode" property="barcode" jdbcType="VARCHAR" />
+		<result column="disabled" property="disabled" jdbcType="INTEGER" />
+		<result column="use_platform" property="usePlatform" jdbcType="VARCHAR" />
+		<result column="is_score" property="isScore" jdbcType="INTEGER" />
+		<result column="score" property="score" jdbcType="DECIMAL" />
+		<result column="reward_score" property="rewardScore" jdbcType="DECIMAL" />
+		<result column="check_status" property="checkStatus" jdbcType="VARCHAR" />
+		<result column="supply_type" property="supplyType" jdbcType="VARCHAR" />
+		<result column="isbreak" property="isbreak" jdbcType="INTEGER" />
+		<result column="isdirect" property="isdirect" jdbcType="INTEGER" />
+		<result column="through_reason" property="throughReason"
+			jdbcType="VARCHAR" />
+		<result column="point" property="point" jdbcType="INTEGER" />
+		<result column="is_show_weight" property="isShowWeight"
+			jdbcType="INTEGER" />
+	</resultMap>
+
+	<resultMap id="ResultMapWithBLOBs"
+		type="com.meiduimall.service.catalog.entity.SysitemItemWithBLOBs"
+		extends="BaseResultMap">
+		<result column="list_image" property="listImage" jdbcType="LONGVARCHAR" />
+		<result column="spec_desc" property="specDesc" jdbcType="LONGVARCHAR" />
+		<result column="props_name" property="propsName" jdbcType="LONGVARCHAR" />
+		<result column="params" property="params" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	
+	<resultMap id="GoodsDetailResultMap" 
+		type="com.meiduimall.service.catalog.result.GoodsDetailResult">
+		<result column="item_id" property="itemId" jdbcType="INTEGER"/>
+		<result column="title" property="title" jdbcType="VARCHAR"/>
+		<result column="sub_title" property="subTitle" jdbcType="VARCHAR"/>
+		<result column="price" property="price" jdbcType="DECIMAL"/>
+		<result column="point" property="point" jdbcType="INTEGER"/>
+		<result column="image_default_id" property="imageDefaultId" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<resultMap id="ShopGoodsDetailResultMap"
+		type="com.meiduimall.service.catalog.result.ShopGoodsDetailResult">
+		<result column="item_id" property="itemId" jdbcType="INTEGER"/>
+		<result column="title" property="title" jdbcType="VARCHAR"/>
+		<result column="price" property="price" jdbcType="DECIMAL"/>
+		<result column="point" property="point" jdbcType="INTEGER"/>
+		<result column="image_default_id" property="imageDefaultId" jdbcType="VARCHAR"/>
+		<result column="shop_cat_id" property="shopCatId" jdbcType="VARCHAR"/>
+		<result column="list_time" property="listTime" jdbcType="INTEGER"/>
+		<result column="quantity" property="quantity" jdbcType="INTEGER"/>
+	</resultMap>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+
+	<sql id="Base_Column_List">
+		item_id, shop_id, cat_id, brand_id, shop_cat_id, title,
+		sub_title, bn, price,
+		cost_price,
+		mkt_price, weight, image_default_id,
+		store, freez, order_sort, modified_time,
+		has_discount,
+		is_virtual,
+		is_timing, violation, is_selfshop, nospec, sub_stock, outer_id,
+		is_offline,
+		barcode, disabled, use_platform, is_score, score,
+		reward_score, check_status,
+		supply_type,
+		isbreak, isdirect,
+		through_reason, point, is_show_weight
+	</sql>
+
+	<sql id="Blob_Column_List">
+		list_image, spec_desc, props_name, params
+	</sql>
+	
+	<sql id="Sql_Shop_Info">
+		<where>
+			sysitem_item_count.item_id=sysitem_item.item_id
+			AND sysitem_item_status.item_id=sysitem_item.item_id
+			AND sysitem_item_status.approve_status='onsale'
+			<if test="shopId != null">
+				and sysitem_item.shop_id=#{shopId}
+			</if>
+			<if test="shopCatId != null">
+				and sysitem_item.shop_cat_id=#{shopCatId}
+			</if>
+		</where>
+	</sql>
+
+
+	<!-- 根据商品ID查询商品数量 -->
+	<select id="getItemCountByItemId" parameterType="int"
+		resultType="int">
+		SELECT COUNT(*) FROM sysitem_item WHERE item_id=#{item_id}
+	</select>
+	
+	<select id="selectItemCountByShopInfo"
+		parameterType="com.meiduimall.service.catalog.request.ShopProductRequest"
+		resultType="int">
+		SELECT count(*) FROM
+		sysitem_item,sysitem_item_count,sysitem_item_status
+		<include refid="Sql_Shop_Info" />
+	</select>
+
+	<select id="selectItemByShopInfo"
+		parameterType="com.meiduimall.service.catalog.request.ShopProductRequest"
+		resultMap="ShopGoodsDetailResultMap" >
+		SELECT
+		sysitem_item.item_id,sysitem_item.title,sysitem_item.price,
+		sysitem_item.point,sysitem_item.image_default_id,sysitem_item.shop_cat_id,
+		sysitem_item_status.list_time,
+		sysitem_item_count.sold_quantity + sysitem_item_count.vitural_quantity quantity
+		FROM
+		sysitem_item,sysitem_item_count,sysitem_item_status
+		<include refid="Sql_Shop_Info" />
+		order by ${sortBy} ${column} limit #{limitBegin},#{pageSize}
+	</select>
+
+	<!-- 根据商品多个ID查询多个商品信息 -->
+	<select id="getItemsInItemId" parameterType="java.util.List"
+		resultMap="GoodsDetailResultMap">
+		SELECT
+		item_id,title,sub_title,price,point,image_default_id
+		FROM
+		sysitem_item
+		<if test="list != null">
+			<where>
+				<foreach collection="list" item="item_id" open="item_id IN ("
+					separator="," close=")">#{item_id}</foreach>
+			</where>
+		</if>
+	</select>
+
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Integer">
+		select
+		*
+		from sysitem_item
+		where item_id = #{itemId,jdbcType=INTEGER}
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		sysitem_item
+		where item_id = #{itemId,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="insert"
+		parameterType="com.meiduimall.service.catalog.entity.SysitemItemWithBLOBs">
+		insert into sysitem_item (item_id, shop_id, cat_id,
+		brand_id, shop_cat_id, title,
+		sub_title, bn, price,
+		cost_price,
+		mkt_price, weight,
+		image_default_id, store, freez,
+		order_sort,
+		modified_time, has_discount,
+		is_virtual, is_timing, violation,
+		is_selfshop, nospec, sub_stock, outer_id,
+		is_offline, barcode,
+		disabled,
+		use_platform, is_score, score,
+		reward_score, check_status,
+		supply_type,
+		isbreak, isdirect, through_reason,
+		point, is_show_weight,
+		list_image,
+		spec_desc, props_name, params
+		)
+		values
+		(#{itemId,jdbcType=INTEGER}, #{shopId,jdbcType=INTEGER},
+		#{catId,jdbcType=INTEGER},
+		#{brandId,jdbcType=INTEGER},
+		#{shopCatId,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR},
+		#{subTitle,jdbcType=VARCHAR}, #{bn,jdbcType=VARCHAR},
+		#{price,jdbcType=DECIMAL},
+		#{costPrice,jdbcType=DECIMAL},
+		#{mktPrice,jdbcType=DECIMAL}, #{weight,jdbcType=DECIMAL},
+		#{imageDefaultId,jdbcType=VARCHAR}, #{store,jdbcType=INTEGER},
+		#{freez,jdbcType=INTEGER},
+		#{orderSort,jdbcType=INTEGER},
+		#{modifiedTime,jdbcType=INTEGER}, #{hasDiscount,jdbcType=INTEGER},
+		#{isVirtual,jdbcType=INTEGER}, #{isTiming,jdbcType=INTEGER},
+		#{violation,jdbcType=INTEGER},
+		#{isSelfshop,jdbcType=INTEGER},
+		#{nospec,jdbcType=INTEGER}, #{subStock,jdbcType=INTEGER},
+		#{outerId,jdbcType=VARCHAR},
+		#{isOffline,jdbcType=INTEGER},
+		#{barcode,jdbcType=VARCHAR}, #{disabled,jdbcType=INTEGER},
+		#{usePlatform,jdbcType=VARCHAR}, #{isScore,jdbcType=INTEGER},
+		#{score,jdbcType=DECIMAL},
+		#{rewardScore,jdbcType=DECIMAL},
+		#{checkStatus,jdbcType=VARCHAR}, #{supplyType,jdbcType=VARCHAR},
+		#{isbreak,jdbcType=INTEGER}, #{isdirect,jdbcType=INTEGER},
+		#{throughReason,jdbcType=VARCHAR},
+		#{point,jdbcType=INTEGER},
+		#{isShowWeight,jdbcType=INTEGER}, #{listImage,jdbcType=LONGVARCHAR},
+		#{specDesc,jdbcType=LONGVARCHAR}, #{propsName,jdbcType=LONGVARCHAR},
+		#{params,jdbcType=LONGVARCHAR}
+		)
+	</insert>
+
+	<insert id="insertSelective"
+		parameterType="com.meiduimall.service.catalog.entity.SysitemItemWithBLOBs">
+		insert into sysitem_item
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="itemId != null">
+				item_id,
+			</if>
+			<if test="shopId != null">
+				shop_id,
+			</if>
+			<if test="catId != null">
+				cat_id,
+			</if>
+			<if test="brandId != null">
+				brand_id,
+			</if>
+			<if test="shopCatId != null">
+				shop_cat_id,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="subTitle != null">
+				sub_title,
+			</if>
+			<if test="bn != null">
+				bn,
+			</if>
+			<if test="price != null">
+				price,
+			</if>
+			<if test="costPrice != null">
+				cost_price,
+			</if>
+			<if test="mktPrice != null">
+				mkt_price,
+			</if>
+			<if test="weight != null">
+				weight,
+			</if>
+			<if test="imageDefaultId != null">
+				image_default_id,
+			</if>
+			<if test="store != null">
+				store,
+			</if>
+			<if test="freez != null">
+				freez,
+			</if>
+			<if test="orderSort != null">
+				order_sort,
+			</if>
+			<if test="modifiedTime != null">
+				modified_time,
+			</if>
+			<if test="hasDiscount != null">
+				has_discount,
+			</if>
+			<if test="isVirtual != null">
+				is_virtual,
+			</if>
+			<if test="isTiming != null">
+				is_timing,
+			</if>
+			<if test="violation != null">
+				violation,
+			</if>
+			<if test="isSelfshop != null">
+				is_selfshop,
+			</if>
+			<if test="nospec != null">
+				nospec,
+			</if>
+			<if test="subStock != null">
+				sub_stock,
+			</if>
+			<if test="outerId != null">
+				outer_id,
+			</if>
+			<if test="isOffline != null">
+				is_offline,
+			</if>
+			<if test="barcode != null">
+				barcode,
+			</if>
+			<if test="disabled != null">
+				disabled,
+			</if>
+			<if test="usePlatform != null">
+				use_platform,
+			</if>
+			<if test="isScore != null">
+				is_score,
+			</if>
+			<if test="score != null">
+				score,
+			</if>
+			<if test="rewardScore != null">
+				reward_score,
+			</if>
+			<if test="checkStatus != null">
+				check_status,
+			</if>
+			<if test="supplyType != null">
+				supply_type,
+			</if>
+			<if test="isbreak != null">
+				isbreak,
+			</if>
+			<if test="isdirect != null">
+				isdirect,
+			</if>
+			<if test="throughReason != null">
+				through_reason,
+			</if>
+			<if test="point != null">
+				point,
+			</if>
+			<if test="isShowWeight != null">
+				is_show_weight,
+			</if>
+			<if test="listImage != null">
+				list_image,
+			</if>
+			<if test="specDesc != null">
+				spec_desc,
+			</if>
+			<if test="propsName != null">
+				props_name,
+			</if>
+			<if test="params != null">
+				params,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="itemId != null">
+				#{itemId,jdbcType=INTEGER},
+			</if>
+			<if test="shopId != null">
+				#{shopId,jdbcType=INTEGER},
+			</if>
+			<if test="catId != null">
+				#{catId,jdbcType=INTEGER},
+			</if>
+			<if test="brandId != null">
+				#{brandId,jdbcType=INTEGER},
+			</if>
+			<if test="shopCatId != null">
+				#{shopCatId,jdbcType=VARCHAR},
+			</if>
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="subTitle != null">
+				#{subTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="bn != null">
+				#{bn,jdbcType=VARCHAR},
+			</if>
+			<if test="price != null">
+				#{price,jdbcType=DECIMAL},
+			</if>
+			<if test="costPrice != null">
+				#{costPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="mktPrice != null">
+				#{mktPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="weight != null">
+				#{weight,jdbcType=DECIMAL},
+			</if>
+			<if test="imageDefaultId != null">
+				#{imageDefaultId,jdbcType=VARCHAR},
+			</if>
+			<if test="store != null">
+				#{store,jdbcType=INTEGER},
+			</if>
+			<if test="freez != null">
+				#{freez,jdbcType=INTEGER},
+			</if>
+			<if test="orderSort != null">
+				#{orderSort,jdbcType=INTEGER},
+			</if>
+			<if test="modifiedTime != null">
+				#{modifiedTime,jdbcType=INTEGER},
+			</if>
+			<if test="hasDiscount != null">
+				#{hasDiscount,jdbcType=INTEGER},
+			</if>
+			<if test="isVirtual != null">
+				#{isVirtual,jdbcType=INTEGER},
+			</if>
+			<if test="isTiming != null">
+				#{isTiming,jdbcType=INTEGER},
+			</if>
+			<if test="violation != null">
+				#{violation,jdbcType=INTEGER},
+			</if>
+			<if test="isSelfshop != null">
+				#{isSelfshop,jdbcType=INTEGER},
+			</if>
+			<if test="nospec != null">
+				#{nospec,jdbcType=INTEGER},
+			</if>
+			<if test="subStock != null">
+				#{subStock,jdbcType=INTEGER},
+			</if>
+			<if test="outerId != null">
+				#{outerId,jdbcType=VARCHAR},
+			</if>
+			<if test="isOffline != null">
+				#{isOffline,jdbcType=INTEGER},
+			</if>
+			<if test="barcode != null">
+				#{barcode,jdbcType=VARCHAR},
+			</if>
+			<if test="disabled != null">
+				#{disabled,jdbcType=INTEGER},
+			</if>
+			<if test="usePlatform != null">
+				#{usePlatform,jdbcType=VARCHAR},
+			</if>
+			<if test="isScore != null">
+				#{isScore,jdbcType=INTEGER},
+			</if>
+			<if test="score != null">
+				#{score,jdbcType=DECIMAL},
+			</if>
+			<if test="rewardScore != null">
+				#{rewardScore,jdbcType=DECIMAL},
+			</if>
+			<if test="checkStatus != null">
+				#{checkStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="supplyType != null">
+				#{supplyType,jdbcType=VARCHAR},
+			</if>
+			<if test="isbreak != null">
+				#{isbreak,jdbcType=INTEGER},
+			</if>
+			<if test="isdirect != null">
+				#{isdirect,jdbcType=INTEGER},
+			</if>
+			<if test="throughReason != null">
+				#{throughReason,jdbcType=VARCHAR},
+			</if>
+			<if test="point != null">
+				#{point,jdbcType=INTEGER},
+			</if>
+			<if test="isShowWeight != null">
+				#{isShowWeight,jdbcType=INTEGER},
+			</if>
+			<if test="listImage != null">
+				#{listImage,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="specDesc != null">
+				#{specDesc,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="propsName != null">
+				#{propsName,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="params != null">
+				#{params,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.meiduimall.service.catalog.entity.SysitemItemWithBLOBs">
+		update sysitem_item
+		<set>
+			<if test="shopId != null">
+				shop_id = #{shopId,jdbcType=INTEGER},
+			</if>
+			<if test="catId != null">
+				cat_id = #{catId,jdbcType=INTEGER},
+			</if>
+			<if test="brandId != null">
+				brand_id = #{brandId,jdbcType=INTEGER},
+			</if>
+			<if test="shopCatId != null">
+				shop_cat_id = #{shopCatId,jdbcType=VARCHAR},
+			</if>
+			<if test="title != null">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="subTitle != null">
+				sub_title = #{subTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="bn != null">
+				bn = #{bn,jdbcType=VARCHAR},
+			</if>
+			<if test="price != null">
+				price = #{price,jdbcType=DECIMAL},
+			</if>
+			<if test="costPrice != null">
+				cost_price = #{costPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="mktPrice != null">
+				mkt_price = #{mktPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="weight != null">
+				weight = #{weight,jdbcType=DECIMAL},
+			</if>
+			<if test="imageDefaultId != null">
+				image_default_id = #{imageDefaultId,jdbcType=VARCHAR},
+			</if>
+			<if test="store != null">
+				store = #{store,jdbcType=INTEGER},
+			</if>
+			<if test="freez != null">
+				freez = #{freez,jdbcType=INTEGER},
+			</if>
+			<if test="orderSort != null">
+				order_sort = #{orderSort,jdbcType=INTEGER},
+			</if>
+			<if test="modifiedTime != null">
+				modified_time = #{modifiedTime,jdbcType=INTEGER},
+			</if>
+			<if test="hasDiscount != null">
+				has_discount = #{hasDiscount,jdbcType=INTEGER},
+			</if>
+			<if test="isVirtual != null">
+				is_virtual = #{isVirtual,jdbcType=INTEGER},
+			</if>
+			<if test="isTiming != null">
+				is_timing = #{isTiming,jdbcType=INTEGER},
+			</if>
+			<if test="violation != null">
+				violation = #{violation,jdbcType=INTEGER},
+			</if>
+			<if test="isSelfshop != null">
+				is_selfshop = #{isSelfshop,jdbcType=INTEGER},
+			</if>
+			<if test="nospec != null">
+				nospec = #{nospec,jdbcType=INTEGER},
+			</if>
+			<if test="subStock != null">
+				sub_stock = #{subStock,jdbcType=INTEGER},
+			</if>
+			<if test="outerId != null">
+				outer_id = #{outerId,jdbcType=VARCHAR},
+			</if>
+			<if test="isOffline != null">
+				is_offline = #{isOffline,jdbcType=INTEGER},
+			</if>
+			<if test="barcode != null">
+				barcode = #{barcode,jdbcType=VARCHAR},
+			</if>
+			<if test="disabled != null">
+				disabled = #{disabled,jdbcType=INTEGER},
+			</if>
+			<if test="usePlatform != null">
+				use_platform = #{usePlatform,jdbcType=VARCHAR},
+			</if>
+			<if test="isScore != null">
+				is_score = #{isScore,jdbcType=INTEGER},
+			</if>
+			<if test="score != null">
+				score = #{score,jdbcType=DECIMAL},
+			</if>
+			<if test="rewardScore != null">
+				reward_score = #{rewardScore,jdbcType=DECIMAL},
+			</if>
+			<if test="checkStatus != null">
+				check_status = #{checkStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="supplyType != null">
+				supply_type = #{supplyType,jdbcType=VARCHAR},
+			</if>
+			<if test="isbreak != null">
+				isbreak = #{isbreak,jdbcType=INTEGER},
+			</if>
+			<if test="isdirect != null">
+				isdirect = #{isdirect,jdbcType=INTEGER},
+			</if>
+			<if test="throughReason != null">
+				through_reason = #{throughReason,jdbcType=VARCHAR},
+			</if>
+			<if test="point != null">
+				point = #{point,jdbcType=INTEGER},
+			</if>
+			<if test="isShowWeight != null">
+				is_show_weight = #{isShowWeight,jdbcType=INTEGER},
+			</if>
+			<if test="listImage != null">
+				list_image = #{listImage,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="specDesc != null">
+				spec_desc = #{specDesc,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="propsName != null">
+				props_name = #{propsName,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="params != null">
+				params = #{params,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where item_id = #{itemId,jdbcType=INTEGER}
+	</update>
+
+	<update id="updateByPrimaryKeyWithBLOBs"
+		parameterType="com.meiduimall.service.catalog.entity.SysitemItemWithBLOBs">
+		update sysitem_item
+		set shop_id =
+		#{shopId,jdbcType=INTEGER},
+		cat_id = #{catId,jdbcType=INTEGER},
+		brand_id = #{brandId,jdbcType=INTEGER},
+		shop_cat_id =
+		#{shopCatId,jdbcType=VARCHAR},
+		title = #{title,jdbcType=VARCHAR},
+		sub_title = #{subTitle,jdbcType=VARCHAR},
+		bn = #{bn,jdbcType=VARCHAR},
+		price = #{price,jdbcType=DECIMAL},
+		cost_price =
+		#{costPrice,jdbcType=DECIMAL},
+		mkt_price =
+		#{mktPrice,jdbcType=DECIMAL},
+		weight = #{weight,jdbcType=DECIMAL},
+		image_default_id = #{imageDefaultId,jdbcType=VARCHAR},
+		store =
+		#{store,jdbcType=INTEGER},
+		freez = #{freez,jdbcType=INTEGER},
+		order_sort = #{orderSort,jdbcType=INTEGER},
+		modified_time =
+		#{modifiedTime,jdbcType=INTEGER},
+		has_discount =
+		#{hasDiscount,jdbcType=INTEGER},
+		is_virtual =
+		#{isVirtual,jdbcType=INTEGER},
+		is_timing =
+		#{isTiming,jdbcType=INTEGER},
+		violation =
+		#{violation,jdbcType=INTEGER},
+		is_selfshop =
+		#{isSelfshop,jdbcType=INTEGER},
+		nospec = #{nospec,jdbcType=INTEGER},
+		sub_stock = #{subStock,jdbcType=INTEGER},
+		outer_id =
+		#{outerId,jdbcType=VARCHAR},
+		is_offline =
+		#{isOffline,jdbcType=INTEGER},
+		barcode = #{barcode,jdbcType=VARCHAR},
+		disabled = #{disabled,jdbcType=INTEGER},
+		use_platform =
+		#{usePlatform,jdbcType=VARCHAR},
+		is_score =
+		#{isScore,jdbcType=INTEGER},
+		score = #{score,jdbcType=DECIMAL},
+		reward_score = #{rewardScore,jdbcType=DECIMAL},
+		check_status =
+		#{checkStatus,jdbcType=VARCHAR},
+		supply_type =
+		#{supplyType,jdbcType=VARCHAR},
+		isbreak = #{isbreak,jdbcType=INTEGER},
+		isdirect = #{isdirect,jdbcType=INTEGER},
+		through_reason =
+		#{throughReason,jdbcType=VARCHAR},
+		point = #{point,jdbcType=INTEGER},
+		is_show_weight = #{isShowWeight,jdbcType=INTEGER},
+		list_image =
+		#{listImage,jdbcType=LONGVARCHAR},
+		spec_desc =
+		#{specDesc,jdbcType=LONGVARCHAR},
+		props_name =
+		#{propsName,jdbcType=LONGVARCHAR},
+		params =
+		#{params,jdbcType=LONGVARCHAR}
+		where item_id =
+		#{itemId,jdbcType=INTEGER}
+	</update>
+
+	<update id="updateByPrimaryKey" parameterType="com.meiduimall.service.catalog.entity.SysitemItem">
+		update
+		sysitem_item
+		set shop_id = #{shopId,jdbcType=INTEGER},
+		cat_id =
+		#{catId,jdbcType=INTEGER},
+		brand_id = #{brandId,jdbcType=INTEGER},
+		shop_cat_id = #{shopCatId,jdbcType=VARCHAR},
+		title =
+		#{title,jdbcType=VARCHAR},
+		sub_title = #{subTitle,jdbcType=VARCHAR},
+		bn
+		= #{bn,jdbcType=VARCHAR},
+		price = #{price,jdbcType=DECIMAL},
+		cost_price
+		= #{costPrice,jdbcType=DECIMAL},
+		mkt_price =
+		#{mktPrice,jdbcType=DECIMAL},
+		weight = #{weight,jdbcType=DECIMAL},
+		image_default_id = #{imageDefaultId,jdbcType=VARCHAR},
+		store =
+		#{store,jdbcType=INTEGER},
+		freez = #{freez,jdbcType=INTEGER},
+		order_sort = #{orderSort,jdbcType=INTEGER},
+		modified_time =
+		#{modifiedTime,jdbcType=INTEGER},
+		has_discount =
+		#{hasDiscount,jdbcType=INTEGER},
+		is_virtual =
+		#{isVirtual,jdbcType=INTEGER},
+		is_timing =
+		#{isTiming,jdbcType=INTEGER},
+		violation =
+		#{violation,jdbcType=INTEGER},
+		is_selfshop =
+		#{isSelfshop,jdbcType=INTEGER},
+		nospec = #{nospec,jdbcType=INTEGER},
+		sub_stock = #{subStock,jdbcType=INTEGER},
+		outer_id =
+		#{outerId,jdbcType=VARCHAR},
+		is_offline =
+		#{isOffline,jdbcType=INTEGER},
+		barcode = #{barcode,jdbcType=VARCHAR},
+		disabled = #{disabled,jdbcType=INTEGER},
+		use_platform =
+		#{usePlatform,jdbcType=VARCHAR},
+		is_score =
+		#{isScore,jdbcType=INTEGER},
+		score = #{score,jdbcType=DECIMAL},
+		reward_score = #{rewardScore,jdbcType=DECIMAL},
+		check_status =
+		#{checkStatus,jdbcType=VARCHAR},
+		supply_type =
+		#{supplyType,jdbcType=VARCHAR},
+		isbreak = #{isbreak,jdbcType=INTEGER},
+		isdirect = #{isdirect,jdbcType=INTEGER},
+		through_reason =
+		#{throughReason,jdbcType=VARCHAR},
+		point = #{point,jdbcType=INTEGER},
+		is_show_weight = #{isShowWeight,jdbcType=INTEGER}
+		where item_id =
+		#{itemId,jdbcType=INTEGER}
+	</update>
+</mapper>

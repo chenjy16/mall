@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<!-- 使用 mvn mybatis-generator:generate -->
+<generatorConfiguration>
+    <!-- 配置文件 -->
+<!--     <properties resource="jdbc.properties"/> -->
+    <context id="shiroTables" targetRuntime="MyBatis3" defaultModelType="flat">
+
+        <!-- plugin -->
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
+
+        <!-- 取消生成的代码注释 -->
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!-- 连接配置   (这里需要配置数据库连接)  -->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://192.168.4.236:3306/meidui_settlement" userId="root"
+                        password="meidui@2016.?!">
+        </jdbcConnection>
+
+        <!-- javaModelGenerator是模型的生成信息，这里将指定这些Java model类的生成路径 -->
+        <javaModelGenerator targetPackage="com.meiduimall.service.settlement.model"
+                            targetProject="src/main/java">
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!-- 生成Mapper 配置文件 -->
+        <sqlMapGenerator targetPackage="com.meiduimall.service.settlement.mapper"
+                         targetProject="src/main/resources">
+        </sqlMapGenerator>
+
+        <!-- javaClientGenerator是应用接口的生成信息 (由于我们的工程做了封装 所以这里不需要 生成mapper类 )  -->
+<!--         <javaClientGenerator type="XMLMAPPER" -->
+<!--                              targetPackage="com.meiduimall.push.mapper" targetProject="src/main/java"> -->
+<!--             <property name="enableSubPackages" value="true"/> -->
+<!--         </javaClientGenerator> -->
+
+        <!-- oracle 使用 schema 对应 用户名称空间 mysql 使用 catalog 对应 数据库 -->
+        <!--<table schema="shiro" tableName="%" enableCountByExample="false"-->
+        <!--enableDeleteByExample="false" enableUpdateByExample="false"-->
+        <!--selectByExampleQueryId="false" enableSelectByExample="false">-->
+        <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
+
+     <!-- schema即为数据库名 tableName为对应的数据库表 domainObjectName是要生成的实体类 enable*ByExample   
+                是否生成 example类   (这里需要配置数据库名,表名和生成实体类的名字 )  -->  
+        <table schema="meidui_settlement" tableName="ecm_mzf_draw" domainObjectName="EcmMzfDraw"
+               enableCountByExample="false"
+               enableDeleteByExample="false"
+               enableUpdateByExample="false"
+               selectByExampleQueryId="false"
+               enableSelectByExample="false">
+        </table>
+    </context>
+</generatorConfiguration>
+
+
+<!-- 方法一: 在eclipse 中，选择pom.xml文件，击右键先择Run AS——>Maven Build… ——>在Goals框中输入：mybatis-generator:generate  -->
+<!-- 方法二: 如果在命令行输入Maven命令即可，注意：一定是当前项目目录下运行该命令：mvn mybatis-generator:generate -->
+<!-- 刷新工程,代码生成完，大功告别成。 -->
+
+
+
+        <!-- 步骤一：maven导入plugin -->
+        <!-- <plugin>
+            <groupId>org.mybatis.generator</groupId>
+            <artifactId>mybatis-generator-maven-plugin</artifactId>
+            <version>1.3.1</version>
+            <configuration>
+                <verbose>true</verbose>
+                <overwrite>true</overwrite>
+            </configuration>
+        </plugin> -->
+
+        <!-- 步骤二：配置generatorConfig.xml -->
+
+        <!-- 步骤三：mvn mybatis-generator:generate -->
+
+        <!-- 参考链接：http://blog.csdn.net/gufeng672/article/details/27196347 -->
+
+ 

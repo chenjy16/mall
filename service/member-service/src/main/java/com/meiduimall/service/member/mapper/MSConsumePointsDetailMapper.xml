@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MSConsumePointsDetailMapper">
+	
+	<resultMap id="BaseResultMap" type="com.meiduimall.service.member.model.MSConsumePointsDetail">
+		<id property="mcpId" column="mcp_id" jdbcType="VARCHAR" />
+		<result property="memId" column="mem_id" jdbcType="VARCHAR"/>
+		<result property="mcpOrderId" column="mcp_order_id" jdbcType="VARCHAR"/>
+		<result property="mcpOrderSource" column="mcp_order_source" jdbcType="VARCHAR"/>
+		<result property="mcpOperatorType" column="mcp_operator_type" jdbcType="VARCHAR"/>
+		<result property="mcpIncome" column="mcp_income" jdbcType="VARCHAR"/>
+		<result property="mcpExpenditure" column="mcp_expenditure" jdbcType="VARCHAR"/>
+		<result property="mcpBalance" column="mcp_balance" jdbcType="VARCHAR"/>
+		<result property="mcpCreatedBy" column="mcp_created_by" jdbcType="VARCHAR"/>
+		<result property="mcpCreatedDate" column="mcp_created_date" jdbcType="DATE"/>
+		<result property="mcpUpdatedBy" column="mcp_updated_by" jdbcType="VARCHAR"/>
+		<result property="mcpUpdatedDate" column="mcp_updated_date" jdbcType="DATE"/>
+		<result property="mcpRemark" column="mcp_remark" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<resultMap id="BaseResultMapGet" type="com.meiduimall.service.member.model.MSConsumePointsDetailGet">
+		<id property="mcpId" column="mcp_id" jdbcType="VARCHAR" />
+		<result property="memId" column="mem_id" jdbcType="VARCHAR"/>
+		<result property="mcpOrderId" column="mcp_order_id" jdbcType="VARCHAR"/>
+		<result property="mcpOrderSource" column="mcp_order_source" jdbcType="VARCHAR"/>
+		<result property="mcpOperatorType" column="mcp_operator_type" jdbcType="VARCHAR"/>
+		<result property="mcpIncome" column="mcp_income" jdbcType="VARCHAR"/>
+		<result property="mcpExpenditure" column="mcp_expenditure" jdbcType="VARCHAR"/>
+		<result property="mcpBalance" column="mcp_balance" jdbcType="VARCHAR"/>
+		<result property="mcpCreatedBy" column="mcp_created_by" jdbcType="VARCHAR"/>
+		<result property="mcpCreatedDate" column="mcp_created_date" jdbcType="DATE"/>
+		<result property="mcpUpdatedBy" column="mcp_updated_by" jdbcType="VARCHAR"/>
+		<result property="mcpUpdatedDate" column="mcp_updated_date" jdbcType="DATE"/>
+		<result property="mcpRemark" column="mcp_remark" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<insert id="saveConsumePointsDetails" parameterType="com.meiduimall.service.member.model.MSConsumePointsDetail">
+	 <selectKey resultType="java.lang.String" keyProperty="mcpId" order="BEFORE" >
+        select  UUID()
+     </selectKey>
+	   INSERT INTO  ms_consume_points_detail
+		(mcp_id,
+		mem_id,
+		mcp_order_id,
+		mcp_order_source,
+		mcp_operator_type,
+		mcp_income,
+		mcp_expenditure,
+		mcp_balance,
+		mcp_created_by,
+		mcp_created_date,
+		mcp_updated_by,
+		mcp_updated_date,
+		mcp_remark)
+		VALUES
+		(#{mcpId},
+		#{memId},
+		#{mcpOrderId},
+		#{mcpOrderSource},
+		#{mcpOperatorType},
+		#{mcpIncome},
+		#{mcpExpenditure},
+		#{mcpBalance},
+		#{mcpCreatedBy},
+		#{mcpCreatedDate},
+		#{mcpUpdatedBy},
+		#{mcpUpdatedDate},
+		#{mcpRemark}
+		)
+	</insert>
+	
+	<select id="getSocreCountByType" resultMap="BaseResultMapGet" parameterType="Map">
+		SELECT t.mcp_id, t.mem_id, t.mcp_order_id, t.mcp_order_source, t.mcp_operator_type, t.mcp_income, t.mcp_expenditure, t.mcp_balance, t.mcp_created_by, t.mcp_created_date, t.mcp_updated_by, t.mcp_updated_date, t.mcp_remark FROM ms_consume_points_detail t 
+		WHERE t.mcp_operator_type = #{type} AND t.mem_id = #{memId}
+	</select>
+	
+	<select id="queryListByMember" resultMap="BaseResultMapGet" parameterType="java.util.Map">
+		select c.mcp_id,c.mem_Id,c.mcp_order_id,c.mcp_order_source,c.mcp_operator_type,c.mcp_income,
+	    c.mcp_expenditure,c.mcp_balance,c.mcp_created_by,c.mcp_created_date,c.mcp_remark from
+	     ms_consume_points_detail  c  where 1=1
+      <if test="memId !=null and memId !=''">
+         and c.mem_id=#{memId}
+      </if>
+      <if test="mcpOperatorType !=null and mcpOperatorType !=''">
+        and mcp_operator_type=#{mcpOperatorType}
+      </if>
+       <if test="mcpOperatorTypes !=null and mcpOperatorTypes !=''">
+        and mcp_operator_type in
+        <foreach collection="mcpOperatorTypes"  index="index" item="item" open="(" separator="," close=")" > 
+            #{item} 
+        </foreach> 
+      </if>
+      order by c.mcp_created_date desc
+      <if test="(before_page !=null and before_page !='') and (after_page !=null and after_page !='')">
+         limit #{before_page},#{after_page}
+      </if>
+	</select>
+	
+	<select id="getConsumePointsTotalRecords" resultType="java.lang.Integer" parameterType="java.util.Map">
+	select count(1)  from   ms_consume_points_detail  c  where 1=1
+   
+      <if test="memId !=null and memId !=''">
+         and c.mem_id=#{memId}
+      </if>
+      <if test="mcpOperatorType !=null and mcpOperatorType !=''">
+        and mcp_operator_type=#{mcpOperatorType}
+      </if>
+      <if test="mcpOperatorTypes !=null and mcpOperatorTypes !=''">
+        and mcp_operator_type in
+        <foreach collection="mcpOperatorTypes"  index="index" item="item" open="(" separator="," close=")" > 
+            #{item} 
+        </foreach> 
+      </if>
+	</select>
+	
+	<select id="listMSConsumePointsDetail" parameterType="com.meiduimall.service.member.model.MSConsumePointsDetailGet" resultMap="BaseResultMap">
+	    select c.mcp_id,c.mem_Id,c.mcp_order_id,c.mcp_order_source,c.mcp_operator_type,c.mcp_income,
+	    c.mcp_expenditure,c.mcp_balance,c.mcp_created_by,c.mcp_created_date,c.mcp_remark from
+	     ms_consume_points_detail  c  where 1=1
+	     <if test="memId !=null and memId !=''">
+         	and c.mem_id=#{memId}
+      	 </if>
+	     <if test="mcpOperatorType !=null and mcpOperatorType !=''">
+        	and c.mcp_operator_type=#{mcpOperatorType}
+      	 </if>
+        <if test="mcpOrderId !=null and mcpOrderId !=''">
+         	and c.mcp_order_id=#{mcpOrderId}
+      	 </if>
+        <if test="mcpOrderSource !=null and mcpOrderSource !=''">
+         	and c.mcp_order_source=#{mcpOrderSource}
+      	 </if>
+	</select>
+	
+</mapper>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 会员表 ms_members相关操作 -->
+<mapper namespace="MSMembersMapper">
+
+	<!-- 根据会员ID查询会员信息-->
+	<select id="getRespMemberBasicInfoByMemId" parameterType="java.lang.String" resultType="com.meiduimall.service.member.model.response.ResponseMemberBasicInfo" >
+		SELECT 
+		m.mem_id AS memId,
+		m.mem_phone AS phone,
+		m.mem_nick_name AS nick_name,
+		m.mem_created_date AS registertime,
+	    m.mem_basic_account_total_quantity AS currentpoints,
+	    m.mem_pic AS pic_url,
+		m.mem_email AS email,
+		m.mem_birthday AS birthday,
+		m.mem_sex AS sex,
+		m.mem_name AS name,
+		m.mem_login_name AS login_name,
+		m.mem_reg_year AS memRegYear,
+		m.mem_reg_month AS memRegMonth,
+		m.mem_reg_day AS memRegDay,
+		m.enable AS paypwd_isopen
+		FROM ms_members AS m 
+		WHERE m.mem_id=#{memid}
+	</select>
+	
+	<!-- 根据条件查询会员基本信息-->
+	<select id="getMemberBasicInfoByCondition" parameterType="java.util.Map" resultType="com.meiduimall.service.member.model.MSMembersGet">
+		SELECT 
+		m.mem_id AS memId,
+		m.mem_nick_name AS memNickName,
+		m.mem_email AS memEmail,
+		m.mem_phone AS memPhone,
+		m.mem_name AS memName,
+		m.mem_parent_id AS memParentId, 
+		m.mem_parent_value3 AS memParentValue3, 
+		m.mem_created_date AS memCreatedDate,
+		m.mem_lock_count AS memLockCount,
+	    m.mem_login_time AS memLoginTime,
+	    m.mem_login_name AS memLoginName,
+	    m.dict_mem_status AS dictMemStatus
+		FROM ms_members m
+		WHERE 1=1  
+		<if test="memId != null and memId != ''">
+		AND m.mem_id=#{memId}
+		</if>
+		<if test="userid != null and userid != ''">
+		AND (m.mem_login_name = #{userid} OR m.mem_email = #{userid} OR m.mem_phone = #{userid})
+		</if>
+		<if test="(md_pwd != null and md_pwd != '') or (ygw_pwd != null and ygw_pwd != '')">
+		AND (m.mem_login_pwd=#{ygw_pwd} OR m.mem_login_pwd=#{md_pwd})
+		</if>
+	</select>
+	
+	<!--根据条件更新会员基本信息-->
+	<update id="updateMemberBasicInfoByCondition" parameterType="com.meiduimall.service.member.model.MSMembersGet">
+	  UPDATE ms_members 
+	  <set>
+	  <!-- 更新会员支付密码开关状态 -->
+      <if test="enable != null and enable != ''">enable=#{enable},</if>
+      <!-- 登录成功更新用户的状态 -->
+      <if test="licenseKey != null and licenseKey != ''">mem_license_key=#{licenseKey},</if>
+      <if test="pfLastLoginTime != null">mem_last_login_time=#{pfLastLoginTime},</if>
+      <if test="memLoginTime != null">mem_login_time=#{memLoginTime},</if>
+      <if test="dictMemStatus != null and dictMemStatus != ''">dict_mem_status=#{dictMemStatus},</if>
+      <!-- 更新会员登录密码 -->
+      <if test="memLoginPwd != null and memLoginPwd != ''">mem_login_pwd=#{memLoginPwd},</if>
+      <!-- 更新当天会员被锁定的次数 -->
+      <if test="memLockCount != null and memLockCount != ''">mem_lock_count=#{memLockCount},</if>
+      <!-- 更新会员当前积分余额 -->
+      <if test="memBasicAccountTotalQuantity != null and memBasicAccountTotalQuantity != ''">mem_basic_account_total_quantity=#{memBasicAccountTotalQuantity},</if>
+      </set>
+		WHERE mem_id = #{memId}
+	</update>
+
+	<!--根据会员ID,会员登录密码统计会员信息记录-->
+	<select id="getMemberRecordByTarget" resultType="java.lang.Integer" parameterType="java.util.Map">
+	    SELECT count(1)  FROM  ms_members m 
+	    <if test="(memIdOne !=null and memIdOne !='') and (memLoginPwdOne !=null and memLoginPwdOne !='') and (memLoginPwdTwo !=null and memLoginPwdTwo !='')">
+	        WHERE   m.mem_id=#{memIdOne}  AND (m.mem_login_pwd=#{memLoginPwdOne}  OR  m.mem_login_pwd=#{memLoginPwdTwo})
+	    </if>
+	    <if test="(memIdTwo !=null and memIdTwo !='') and (memLoginPwdThree !=null and memLoginPwdThree !='')">
+	        WHERE   m.mem_id=#{memIdTwo}  AND  m.mem_login_pwd=#{memLoginPwdThree}
+	    </if>
+	</select>
+	
+	<!-- 修改会员基本信息 -->
+	<update id="updateMemberInfoByMemId" parameterType="com.meiduimall.service.member.model.MSMembersSet">
+		UPDATE ms_members SET mem_id = #{memId}
+		<if test="memOldEmail != null and memOldEmail != ''">, mem_old_email = #{memOldEmail}</if>
+		<if test="memEmail != null and memEmail != ''">, mem_email = #{memEmail}</if>
+		<if test="memLoginName != null and memLoginName != ''">, mem_login_name = #{memLoginName}</if>
+		<if test="licenseKey != null and licenseKey != ''">, mem_license_key = #{licenseKey}</if>
+		<if test="memOldPhone != null and memOldPhone != ''">, mem_old_phone = #{memOldPhone}</if>
+		<if test="memPhone != null and memPhone != ''">, mem_phone = #{memPhone}</if>
+		<if test="memNickName != null and memNickName != ''">, mem_nick_name = #{memNickName}</if>
+		<if test="memLoginPwd != null and memLoginPwd != ''">, mem_login_pwd = #{memLoginPwd}</if>
+		<if test="memPayPwd != null and memPayPwd != ''">, mem_pay_pwd = #{memPayPwd}</if>
+		<if test="memParentId != null and memParentId != ''">, mem_parent_id = #{memParentId}</if>
+		<if test="dictMemStatus != null and dictMemStatus != ''">, dict_mem_status = #{dictMemStatus}</if>
+		<if test="memIsAllActivated != null and memIsAllActivated != ''">, mem_is_all_activated = #{memIsAllActivated}</if>
+		<if test="memCreatedDate != null">, mem_created_date = #{memCreatedDate}</if>
+		<if test="memUpdatedDate != null">, mem_updated_date = #{memUpdatedDate}</if>
+		<if test="memSex != null and memSex != ''">, mem_sex = #{memSex}</if>
+		<if test="memBirthday != null">, mem_birthday = #{memBirthday}</if>
+		<if test="memPic != null and memPic != ''">, mem_pic = #{memPic}</if>
+		<if test="memCurrentAddress != null and memCurrentAddress != ''">, mem_current_address = #{memCurrentAddress}</if>
+		<if test="memRegYear != null">, mem_reg_year = #{memRegYear}</if>
+		<if test="memRegMonth != null">, mem_reg_month = #{memRegMonth}</if>
+		<if test="memRegDay != null">, mem_reg_day = #{memRegDay}</if>
+		<if test="memUpdatedBy != null and memUpdatedBy != ''">, mem_updated_by = #{memUpdatedBy}</if>
+		<if test="memCreatedBy != null and memCreatedBy != ''">, mem_created_by = #{memCreatedBy}</if>
+		<if test="memCreatedCategory != null">, mem_created_category = #{memCreatedCategory}</if>
+		<if test="memParentValue1 != null and memParentValue1 != ''">, mem_parent_value1 = #{memParentValue1}</if>
+		<if test="memParentValue2 != null and memParentValue2 != ''">, mem_parent_value2 = #{memParentValue2}</if>
+		<if test="memParentValue3 != null and memParentValue3 != ''">, mem_parent_value3 = #{memParentValue3}</if>
+		<if test="memBasicAccountTotalQuantity != null and memBasicAccountTotalQuantity != ''">, mem_basic_account_total_quantity = #{memBasicAccountTotalQuantity}</if>
+		<if test="memBasicAccountStatus != null and memBasicAccountStatus != ''">, mem_basic_account_status = #{memBasicAccountStatus}</if>
+		<if test="memIntegralConsumeOrignal != null and memIntegralConsumeOrignal != ''">, mem_integral_consume_original = #{memIntegralConsumeOrignal}</if>
+		<if test="memIntegralCurrentResults != null and memIntegralCurrentResults != ''">, mem_integral_current_results = #{memIntegralCurrentResults}</if>
+		<if test="memIntegralTradeOriginal != null and memIntegralTradeOriginal != ''">, mem_integral_trade_original = #{memIntegralTradeOriginal}</if>
+		<if test="memIntegralTradeProfit != null and memIntegralTradeProfit != ''">, mem_integral_trade_profit = #{memIntegralTradeProfit}</if>
+		<if test="memIntegralConsumeProfit != null and memIntegralConsumeProfit != ''">, mem_integral_consume_profit = #{memIntegralConsumeProfit}</if>
+		<if test="memIntegralCurrentValidTradeIntegral != null and memIntegralCurrentValidTradeIntegral != ''">, mem_integral_current_valid_trade_intetgral = #{memIntegralCurrentValidTradeIntegral}</if>
+		<if test="memIntegralCurrentTradedIntegral != null and memIntegralCurrentTradedIntegral != ''">, mem_integral_current_traded_integral = #{memIntegralCurrentTradedIntegral}</if>
+		<if test="memIntegralNextVaidTradeIntegral != null and memIntegralNextVaidTradeIntegral != ''">, mem_integral_next_valid_trade_integral = #{memIntegralNextVaidTradeIntegral}</if>
+		<if test="memIntegralFirstReturnIntegral != null and memIntegralFirstReturnIntegral != ''">, mem_integral_fist_return_integral = #{memIntegralFirstReturnIntegral}</if>
+		<if test="memIntegralRetrunedIntegral != null and memIntegralRetrunedIntegral != ''">, mem_integral_returned_integral = #{memIntegralRetrunedIntegral}</if>
+		<if test="memIntegralSurplusIntegral != null and memIntegralSurplusIntegral != ''">, mem_integral_surplus_integral = #{memIntegralSurplusIntegral}</if>
+		<if test="memIntegralCapitalIncrease != null and memIntegralCapitalIncrease != ''">, mem_integral_capital_increase = #{memIntegralCapitalIncrease}</if>
+		<if test="memIntegralStatus != null and memIntegralStatus != ''">, mem_integral_status = #{memIntegralStatus}</if>
+		<if test="memIntegralConsumeReturnedALL != null and memIntegralConsumeReturnedALL != ''">, mem_integral_consume_returned_all = #{memIntegralConsumeReturnedALL}</if>
+		<if test="memIntegralConsumeReturned != null and memIntegralConsumeReturned != ''">, mem_integral_consume_returned = #{memIntegralConsumeReturned}</if>
+		<if test="memIntegralConsumeWillReturn != null and memIntegralConsumeWillReturn != ''">, mem_integral_consume_will_return = #{memIntegralConsumeWillReturn}</if>
+		<if test="memWallentUrl != null and memWallentUrl != ''">, mem_wallet_url = #{memWallentUrl}</if>
+		<if test="pfLastLoginTime != null">, mem_last_login_time = #{pfLastLoginTime}</if>
+		<if test="memPreorderRight != null and memPreorderRight != ''">, mem_preorder_right = #{memPreorderRight}</if>
+		<if test="memName != null and memName != ''">, mem_name = #{memName}</if>
+		<if test="memLevelDictId != null and memLevelDictId != ''">, mem_level_dict_id = #{memLevelDictId}</if>
+		<if test="memIntegralInitResults != null and memIntegralInitResults != ''">, mem_integral_init_results = #{memIntegralInitResults}</if>
+		<if test="memIntegralIncreatedResults != null and memIntegralIncreatedResults != ''">, mem_integral_increated_results = #{memIntegralIncreatedResults}</if>
+		<if test="memSignSource != null and memSignSource != ''">, mem_sign_source = #{memSignSource}</if>
+		<if test="memPresentLevel != null and memPresentLevel != ''">, mem_present_level = #{memPresentLevel}</if>
+		<if test="memintegralBalance != null and memintegralBalance != ''">, mem_integral_balance = #{memintegralBalance}</if>
+		<if test="memIntegralConsumeCoupon != null and memIntegralConsumeCoupon != ''">, mem_integral_consume_coupon = #{memIntegralConsumeCoupon}</if>
+		<if test="memType != null and memType != ''">, mem_type = #{memType}</if>
+		<if test="memIntegralFrozen != null and memIntegralFrozen != ''">, mem_integral_frozen = #{memIntegralFrozen}</if>
+		<if test="memIsPreorderRights != null and memIsPreorderRights != ''">, mem_is_preorder_rights = #{memIsPreorderRights}</if>
+		<if test="memIsAllowShop != null and memIsAllowShop != ''">, mem_is_allow_shop = #{memIsAllowShop}</if>
+		<if test="memGroupLevel != null and memGroupLevel != ''">, mem_group_level = #{memGroupLevel}</if>
+		<if test="memBanDate != null">, mem_ban_date = #{memBanDate}</if>
+		<if test="memIsConsumeReturnAll != 0">, mem_is_consume_return_all = #{memIsConsumeReturnAll}</if>
+		<if test="memLoginTime != null">, mem_login_time = #{memLoginTime}</if>
+		<if test="changePhoneDate != null">, mem_change_phone_date = #{changePhoneDate}</if>
+		<if test="memCancelorder != null and memCancelorder != ''">, mem_cancelorder = #{memCancelorder}</if>
+		<if test="memTotalProfit != null and memTotalProfit != ''">, mem_total_profit = #{memTotalProfit}</if>
+		<if test="memTotalConsumeProfit != null and memTotalConsumeProfit != ''">, mem_total_consume_profit = #{memTotalConsumeProfit}</if>
+		<if test="memFirstPreOrderRank != null and memFirstPreOrderRank != ''">, mem_first_preorder_rank = #{memFirstPreOrderRank}</if>
+		<if test="memLockCount != null and memLockCount != ''">, mem_lock_count = #{memLockCount}</if>
+		<if test="memTwCurrentAddress != null and memTwCurrentAddress != ''">, mem_tw_current_address = #{memTwCurrentAddress}</if>
+		<if test="memLoginNameIsdefaultIschanged != null and memLoginNameIsdefaultIschanged != ''">, mem_login_name_isdefault_ischanged = #{memLoginNameIsdefaultIschanged}</if>
+		<if test="memParentIsdefaultIschanged != null and memParentIsdefaultIschanged != ''">, mem_parent_isdefault_ischanged = #{memParentIsdefaultIschanged}</if>
+		 WHERE mem_id = #{memId}
+	</update>
+	
+</mapper>

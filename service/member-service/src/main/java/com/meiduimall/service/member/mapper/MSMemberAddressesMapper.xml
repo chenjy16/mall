@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--会员详细地址表ms_member_addresses相关操作 -->
+<mapper namespace="MSMemberAddressesMapper">
+
+<!--根据memid查询会员详细地址 -->
+	<select id="getMemberAddressByMemId"  parameterType="java.lang.String" resultType="com.meiduimall.service.member.model.MSMemberAddresses">
+		SELECT 
+		m.mema_id AS memaId,
+		m.mem_id AS memId,
+		m.mema_details AS memaDetails,
+		m.mema_post AS memaPost,
+		m.mema_status AS memaStatus,
+		m.mema_contact_phone AS memaContactPhone,
+		m.mema_contact_email AS memaContactEmail,
+		m.mema_contact_name AS memaContactName,
+		m.dict_id_country AS dictIdCountry,
+		m.city_id_province AS dictIdProvince,
+		m.city_id_city AS dictIdCity,
+		m.city_id_area AS dictIdArea,
+		m.mema_remark AS memaRemark
+		FROM ms_member_addresses AS m 
+		WHERE m.mem_id=#{memid}
+	</select>
+	
+	<!-- 根据MemaId更新会员地址信息 -->
+	<update id="updateMemberAddressInfoByMemaId" parameterType="com.meiduimall.service.member.model.MemberAddressesSet">
+		UPDATE ms_member_addresses SET mema_id = #{memaId}
+		<if test="memaDetails != null and memaDetails != ''">, mema_details = #{memaDetails}</if>
+		<if test="memaPost != null and memaPost != ''">, mema_post = #{memaPost}</if>
+		<if test="memaStatus != null and memaStatus != ''">, mema_status = #{memaStatus}</if>
+		<if test="memaContactPhone != null and memaContactPhone != ''">, mema_contact_phone = #{memaContactPhone}</if>
+		<if test="memaContactEmail != null and memaContactEmail != ''">, mema_contact_email = #{memaContactEmail}</if>
+		<if test="memaContactName != null and memaContactName != ''">, mema_contact_name = #{memaContactName}</if>
+		<if test="dictIdCountry != null and dictIdCountry != ''">, dict_id_country = #{dictIdCountry}</if>
+		<if test="cityIdProvince != null">, city_id_province = #{cityIdProvince}</if>
+		<if test="cityIdCity != null">, city_id_city = #{cityIdCity}</if>
+		<if test="cityIdArea != null">, city_id_area = #{cityIdArea}</if>
+		<if test="memaRemark != null and memaRemark != ''">, mema_remark = #{memaRemark}</if>
+		WHERE mema_id = #{memaId}
+	</update>
+	
+	<!-- 插入会员地址信息 -->
+	<insert id="addMemberAddressInfo" parameterType="com.meiduimall.service.member.model.MemberAddressesSet">
+		INSERT INTO ms_member_addresses (
+		mema_id
+		<if test="memId != null and memId != ''">,mem_id</if>
+		<if test="memaDetails != null and memaDetails != ''">,mema_details</if>
+		<if test="memaPost != null and memaPost != ''">,mema_post</if>
+		<if test="memaStatus != null and memaStatus != ''">,mema_status</if>
+		<if test="memaContactPhone != null and memaContactPhone != ''">,mema_contact_phone</if>
+		<if test="memaContactEmail != null and memaContactEmail != ''">,mema_contact_email</if>
+		<if test="memaContactName != null and memaContactName != ''">,mema_contact_name</if>
+		<if test="dictIdCountry != null and dictIdCountry != ''">,dict_id_country</if>
+		<if test="cityIdProvince != null and cityIdProvince != ''">,city_id_province</if>
+		<if test="cityIdCity != null and cityIdCity != ''">,city_id_city</if>
+		<if test="cityIdArea != null and cityIdArea != ''">,city_id_area</if>
+		<if test="memaRemark != null and memaRemark != ''">,mema_remark</if>
+		) VALUES (
+		#{memaId}
+	    <if test="memId != null and memId != ''">,#{memId}</if>
+		<if test="memaDetails != null and memaDetails != ''">,#{memaDetails}</if>
+		<if test="memaPost != null and memaPost != ''">,#{memaPost}</if>
+		<if test="memaStatus != null and memaStatus != ''">,#{memaStatus}</if>
+		<if test="memaContactPhone != null and memaContactPhone != ''">,#{memaContactPhone}</if>
+		<if test="memaContactEmail != null and memaContactEmail != ''">,#{memaContactEmail}</if>
+		<if test="memaContactName != null and memaContactName != ''">,#{memaContactName}</if>
+		<if test="dictIdCountry != null and dictIdCountry != ''">,#{dictIdCountry}</if>
+		<if test="cityIdProvince != null and cityIdProvince != ''">,#{cityIdProvince}</if>
+		<if test="cityIdCity != null and cityIdCity != ''">,#{cityIdCity}</if>
+		<if test="cityIdArea != null and cityIdArea != ''">,#{cityIdArea}</if>
+		<if test="memaRemark != null and memaRemark != ''">,#{memaRemark}</if>
+		  )
+	</insert>
+</mapper>

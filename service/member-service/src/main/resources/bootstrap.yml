@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: member-service
+  aop:
+    auto: true
+    proxy-target-class: true
+  http:
+    encoding:
+      force: true
+
+server:
+  port: 8098
+
+
+hystrix:  
+  command:  
+    default:  
+      execution:  
+        isolation:  
+          thread:  
+            timeoutInMilliseconds: 3000 #熔断时间为3000
+            
+
+# mybatis-config
+mybatis :
+  mapper-locations : classpath:com/meiduimall/service/member/mapper/*Mapper.xml 
+  
+  

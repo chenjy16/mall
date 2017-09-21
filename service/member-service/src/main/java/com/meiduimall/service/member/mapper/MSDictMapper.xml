@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--系统字典表ms_dict相关操作 -->
+<mapper namespace="MSDictMapper">
+
+<!--查询系统配置字典父节点-->
+	<select id="queryMsDictByParentId" resultType="com.meiduimall.service.member.model.MSDict"  parameterType="java.lang.String" >
+	SELECT d.* FROM ms_dict d WHERE d.`dic_parent_id`=#{dicparentid} ORDER BY d.`dict_no`
+	</select>
+	
+</mapper>

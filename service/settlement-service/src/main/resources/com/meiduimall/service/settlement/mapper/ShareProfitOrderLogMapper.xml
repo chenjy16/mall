@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ShareProfitOrderLogMapper">
+
+	<resultMap id="shareProfitOrderLogMap" type="ShareProfitOrderLog">
+	  	<id property="id" column="id" />
+	  	<result property="orderSn" column="order_sn"/>
+		<result property="reason" column="reason"/>
+		<result property="createdDate" column="created_date"/>
+		<result property="retryStatus" column="retry_status"/>
+		<result property="retryTime" column="retry_time"/>
+		<result property="retryFlag" column="retry_flag"/>
+		<result property="remark" column="remark"/>
+		<result property="retryFlag" column="retry_flag"/>
+	</resultMap>
+
+
+	<!-- 新增保证金分润流水（金额或积分） -->
+	<insert id="saveShareProfitOrderLog" parameterType="ShareProfitOrderLog" >
+		insert into ecm_mzf_log_shareprofit_order(order_sn,reason,created_date,retry_status,retry_time,retry_flag,remark) 
+		values
+		(#{orderSn},#{reason},#{createdDate},#{retryStatus},#{retryTime},#{retryFlag},#{remark})
+	</insert>
+	
+	<update id="removeRetryFlag" parameterType="java.lang.String" >
+		update ecm_mzf_log_shareprofit_order set retry_flag=0 where order_sn=#{orderSn} and retry_flag=1
+	</update>
+	
+	<select id="get5MinOrders2Retry" resultMap="shareProfitOrderLogMap">
+		SELECT * FROM ecm_mzf_log_shareprofit_order lo WHERE lo.`retry_flag`=1 and #{currentTimestamp}-lo.`created_date`&gt;=300 and #{currentTimestamp} -lo.`created_date`&lt;=900 
+	</select>
+	
+	<select id="get30MinOrders2Retry" resultMap="shareProfitOrderLogMap">
+		SELECT * FROM ecm_mzf_log_shareprofit_order lo WHERE lo.`retry_flag`=1 AND #{currentTimestamp} - lo.`created_date`&gt;=1800 AND #{currentTimestamp} - lo.`created_date`&lt;=2400 
+	</select>
+
+ 	<select id="get12HOrders2Retry" resultMap="shareProfitOrderLogMap">
+		SELECT * FROM ecm_mzf_log_shareprofit_order lo WHERE lo.`retry_flag`=1 and #{currentTimestamp} -lo.`created_date`&gt;=43200 and #{currentTimestamp} -lo.`created_date`&lt;=43800 
+	</select>
+
+
+</mapper>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="MsAccountDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.meiduimall.service.member.model.MSAccountDetail" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="account_id" property="accountId" jdbcType="VARCHAR" />
+    <result column="account_type" property="accountType" jdbcType="VARCHAR" />
+    <result column="mem_id" property="memId" jdbcType="VARCHAR" />
+    <result column="trade_type" property="tradeType" jdbcType="VARCHAR" />
+    <result column="trade_amount" property="tradeAmount" jdbcType="VARCHAR" />
+    <result column="trade_date" property="tradeDate" jdbcType="TIMESTAMP" />
+    <result column="in_or_out" property="inOrOut" jdbcType="INTEGER" />
+    <result column="balance" property="balance" jdbcType="VARCHAR" />
+    <result column="business_no" property="businessNo" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="curr_time" property="currTime" jdbcType="DECIMAL" />
+  </resultMap>
+   
+  <sql id="Base_Column_List" >
+    id, account_id, account_type, mem_id, trade_type, trade_amount, trade_date, in_or_out, 
+    balance, business_no, remark, create_date, curr_time
+  </sql>
+  <select id="listMSAccountDetail" resultMap="BaseResultMap" parameterType="com.meiduimall.service.member.model.MSAccountDetailGet" >
+    select 
+    <include refid="Base_Column_List" />
+    from ms_account_detail m
+    where 1 = 1
+     <if test="accountId !=null and accountId !=''">
+         	and m.account_id = #{accountId}
+     </if> 
+     <if test="accountType !=null and accountType !=''">
+         	and m.account_type = #{accountType}
+     </if> 
+     <if test="memId !=null and memId !=''">
+         	and m.mem_id = #{memId}
+     </if> 
+     <if test="tradeType !=null and tradeType !=''">
+	        and m.trade_type in
+	          <foreach item="id" index="index" collection="tradeTypeList" open="(" separator="," close=")">  
+				  #{id}  
+		  	  </foreach>
+     </if>
+  </select>
+  
+   
+  
+</mapper>

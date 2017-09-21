@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	 <parent>
+        <groupId>com.meiduimall</groupId>
+        <artifactId>service</artifactId>
+        <version>1.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.meiduimall.service</groupId>
+    <artifactId>member-service</artifactId>
+	<name>service::member-service</name>
+	<packaging>jar</packaging>
+
+	<dependencies>
+	
+	    <dependency>
+                <groupId>com.meiduimall</groupId>
+                <artifactId>meiduimall-support-redis</artifactId>
+                <version>${meiduimall-support-redis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.meiduimall</groupId>
+                <artifactId>meiduimall-support-security</artifactId>
+                <version>${meiduimall-support-security.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.meiduimall</groupId>
+                <artifactId>meiduimall-support-core</artifactId>
+                <version>${meiduimall-support-core.version}</version>
+            </dependency>
+            
+            <!-- 热部署，修改了代码不需要重新启动spring boot -->
+		 <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+            
+             <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.tomcat</groupId>
+                        <artifactId>tomcat-jdbc</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            
+                <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper</artifactId>
+            </dependency>
+            
+               <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+            </dependency>
+	
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-eureka</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
+		</dependency>
+        
+        <!-- AOP -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+		
+		<!-- web -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<!-- <exclusions>
+				排除tomcat
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+			</exclusions> -->
+		</dependency>
+		
+		<!-- commons-lang3 -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.3.2</version>
+		</dependency>
+
+		<!-- json处理 -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.7</version>
+		</dependency>
+		
+		<!-- 数据连接池hikari -->
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+		</dependency>
+		
+		 <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-hystrix</artifactId>
+       </dependency>
+	
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+		  <resources> 
+            <resource> 
+                <directory>src/main/java</directory> 
+                <includes>  
+                    <include>**/*.xml</include> 
+                </includes> 
+                <filtering>true</filtering> 
+            </resource> 
+             <resource> 
+                <directory>src/main/resources</directory> 
+            </resource> 
+        </resources> 
+	</build>
+	
+	
+
+
+</project>

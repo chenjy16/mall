@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--省市区地址表ms_city相关操作 -->
+<mapper namespace="MSCityMapper">
+
+  <!--根据省市区编码查询对应的名称-->
+	<select id="getNameByNo"  parameterType="java.lang.String" resultType="java.lang.String">
+	SELECT 
+	m.city_name 
+	FROM ms_city AS m 
+	WHERE m.city_no=#{cityno}
+	</select>
+	
+	<!--根据省市区名称获取对应的编码-->
+	<select id="getNoByName" parameterType="java.lang.String" resultType="java.lang.String">
+	SELECT
+	m.city_no
+	FROM ms_city AS m 
+	WHERE m.city_name = #{cityname}
+	</select>
+	
+</mapper>

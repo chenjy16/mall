@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="SysshopShopMapper" >
+  <resultMap id="BaseResultMap" type="com.meiduimall.service.catalog.entity.SysshopShop" >
+    <id column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="shop_type" property="shopType" jdbcType="VARCHAR" />
+    <result column="seller_id" property="sellerId" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="open_time" property="openTime" jdbcType="INTEGER" />
+    <result column="close_time" property="closeTime" jdbcType="INTEGER" />
+    <result column="close_reason" property="closeReason" jdbcType="VARCHAR" />
+    <result column="shop_logo" property="shopLogo" jdbcType="VARCHAR" />
+    <result column="shopuser_name" property="shopuserName" jdbcType="VARCHAR" />
+    <result column="qq" property="qq" jdbcType="VARCHAR" />
+    <result column="wangwang" property="wangwang" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="shopuser_identity" property="shopuserIdentity" jdbcType="CHAR" />
+    <result column="shopuser_identity_img" property="shopuserIdentityImg" jdbcType="VARCHAR" />
+    <result column="shop_area" property="shopArea" jdbcType="VARCHAR" />
+    <result column="bulletin" property="bulletin" jdbcType="VARCHAR" />
+    <result column="check_goods" property="checkGoods" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <resultMap id="ResultMapWithBLOBs" type="com.meiduimall.service.catalog.entity.SysshopShopWithBLOBs" extends="BaseResultMap" >
+    <result column="shop_descript" property="shopDescript" jdbcType="LONGVARCHAR" />
+    <result column="shop_addr" property="shopAddr" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  
+  <sql id="Base_Column_List" >
+    shop_id, shop_name, shop_type, seller_id, status, open_time, close_time, close_reason, 
+    shop_logo, shopuser_name, qq, wangwang, email, mobile, shopuser_identity, shopuser_identity_img, 
+    shop_area, bulletin, check_goods
+  </sql>
+  
+  <sql id="Blob_Column_List" >
+    shop_descript, shop_addr
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    * 
+    from sysshop_shop
+    where shop_id = #{shopId,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from sysshop_shop
+    where shop_id = #{shopId,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.meiduimall.service.catalog.entity.SysshopShopWithBLOBs" >
+    insert into sysshop_shop (shop_id, shop_name, shop_type, 
+      seller_id, status, open_time, 
+      close_time, close_reason, shop_logo, 
+      shopuser_name, qq, wangwang, 
+      email, mobile, shopuser_identity, 
+      shopuser_identity_img, shop_area, bulletin, 
+      check_goods, shop_descript, shop_addr
+      )
+    values (#{shopId,jdbcType=INTEGER}, #{shopName,jdbcType=VARCHAR}, #{shopType,jdbcType=VARCHAR}, 
+      #{sellerId,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, #{openTime,jdbcType=INTEGER}, 
+      #{closeTime,jdbcType=INTEGER}, #{closeReason,jdbcType=VARCHAR}, #{shopLogo,jdbcType=VARCHAR}, 
+      #{shopuserName,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR}, #{wangwang,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{shopuserIdentity,jdbcType=CHAR}, 
+      #{shopuserIdentityImg,jdbcType=VARCHAR}, #{shopArea,jdbcType=VARCHAR}, #{bulletin,jdbcType=VARCHAR}, 
+      #{checkGoods,jdbcType=INTEGER}, #{shopDescript,jdbcType=LONGVARCHAR}, #{shopAddr,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.meiduimall.service.catalog.entity.SysshopShopWithBLOBs" >
+    insert into sysshop_shop
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="shopName != null" >
+        shop_name,
+      </if>
+      <if test="shopType != null" >
+        shop_type,
+      </if>
+      <if test="sellerId != null" >
+        seller_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="openTime != null" >
+        open_time,
+      </if>
+      <if test="closeTime != null" >
+        close_time,
+      </if>
+      <if test="closeReason != null" >
+        close_reason,
+      </if>
+      <if test="shopLogo != null" >
+        shop_logo,
+      </if>
+      <if test="shopuserName != null" >
+        shopuser_name,
+      </if>
+      <if test="qq != null" >
+        qq,
+      </if>
+      <if test="wangwang != null" >
+        wangwang,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="shopuserIdentity != null" >
+        shopuser_identity,
+      </if>
+      <if test="shopuserIdentityImg != null" >
+        shopuser_identity_img,
+      </if>
+      <if test="shopArea != null" >
+        shop_area,
+      </if>
+      <if test="bulletin != null" >
+        bulletin,
+      </if>
+      <if test="checkGoods != null" >
+        check_goods,
+      </if>
+      <if test="shopDescript != null" >
+        shop_descript,
+      </if>
+      <if test="shopAddr != null" >
+        shop_addr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="shopId != null" >
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="shopName != null" >
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopType != null" >
+        #{shopType,jdbcType=VARCHAR},
+      </if>
+      <if test="sellerId != null" >
+        #{sellerId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="openTime != null" >
+        #{openTime,jdbcType=INTEGER},
+      </if>
+      <if test="closeTime != null" >
+        #{closeTime,jdbcType=INTEGER},
+      </if>
+      <if test="closeReason != null" >
+        #{closeReason,jdbcType=VARCHAR},
+      </if>
+      <if test="shopLogo != null" >
+        #{shopLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopuserName != null" >
+        #{shopuserName,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null" >
+        #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="wangwang != null" >
+        #{wangwang,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="shopuserIdentity != null" >
+        #{shopuserIdentity,jdbcType=CHAR},
+      </if>
+      <if test="shopuserIdentityImg != null" >
+        #{shopuserIdentityImg,jdbcType=VARCHAR},
+      </if>
+      <if test="shopArea != null" >
+        #{shopArea,jdbcType=VARCHAR},
+      </if>
+      <if test="bulletin != null" >
+        #{bulletin,jdbcType=VARCHAR},
+      </if>
+      <if test="checkGoods != null" >
+        #{checkGoods,jdbcType=INTEGER},
+      </if>
+      <if test="shopDescript != null" >
+        #{shopDescript,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="shopAddr != null" >
+        #{shopAddr,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.meiduimall.service.catalog.entity.SysshopShopWithBLOBs" >
+    update sysshop_shop
+    <set >
+      <if test="shopName != null" >
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopType != null" >
+        shop_type = #{shopType,jdbcType=VARCHAR},
+      </if>
+      <if test="sellerId != null" >
+        seller_id = #{sellerId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="openTime != null" >
+        open_time = #{openTime,jdbcType=INTEGER},
+      </if>
+      <if test="closeTime != null" >
+        close_time = #{closeTime,jdbcType=INTEGER},
+      </if>
+      <if test="closeReason != null" >
+        close_reason = #{closeReason,jdbcType=VARCHAR},
+      </if>
+      <if test="shopLogo != null" >
+        shop_logo = #{shopLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopuserName != null" >
+        shopuser_name = #{shopuserName,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null" >
+        qq = #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="wangwang != null" >
+        wangwang = #{wangwang,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="shopuserIdentity != null" >
+        shopuser_identity = #{shopuserIdentity,jdbcType=CHAR},
+      </if>
+      <if test="shopuserIdentityImg != null" >
+        shopuser_identity_img = #{shopuserIdentityImg,jdbcType=VARCHAR},
+      </if>
+      <if test="shopArea != null" >
+        shop_area = #{shopArea,jdbcType=VARCHAR},
+      </if>
+      <if test="bulletin != null" >
+        bulletin = #{bulletin,jdbcType=VARCHAR},
+      </if>
+      <if test="checkGoods != null" >
+        check_goods = #{checkGoods,jdbcType=INTEGER},
+      </if>
+      <if test="shopDescript != null" >
+        shop_descript = #{shopDescript,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="shopAddr != null" >
+        shop_addr = #{shopAddr,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where shop_id = #{shopId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.meiduimall.service.catalog.entity.SysshopShopWithBLOBs" >
+    update sysshop_shop
+    set shop_name = #{shopName,jdbcType=VARCHAR},
+      shop_type = #{shopType,jdbcType=VARCHAR},
+      seller_id = #{sellerId,jdbcType=INTEGER},
+      status = #{status,jdbcType=VARCHAR},
+      open_time = #{openTime,jdbcType=INTEGER},
+      close_time = #{closeTime,jdbcType=INTEGER},
+      close_reason = #{closeReason,jdbcType=VARCHAR},
+      shop_logo = #{shopLogo,jdbcType=VARCHAR},
+      shopuser_name = #{shopuserName,jdbcType=VARCHAR},
+      qq = #{qq,jdbcType=VARCHAR},
+      wangwang = #{wangwang,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      shopuser_identity = #{shopuserIdentity,jdbcType=CHAR},
+      shopuser_identity_img = #{shopuserIdentityImg,jdbcType=VARCHAR},
+      shop_area = #{shopArea,jdbcType=VARCHAR},
+      bulletin = #{bulletin,jdbcType=VARCHAR},
+      check_goods = #{checkGoods,jdbcType=INTEGER},
+      shop_descript = #{shopDescript,jdbcType=LONGVARCHAR},
+      shop_addr = #{shopAddr,jdbcType=LONGVARCHAR}
+    where shop_id = #{shopId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.meiduimall.service.catalog.entity.SysshopShop" >
+    update sysshop_shop
+    set shop_name = #{shopName,jdbcType=VARCHAR},
+      shop_type = #{shopType,jdbcType=VARCHAR},
+      seller_id = #{sellerId,jdbcType=INTEGER},
+      status = #{status,jdbcType=VARCHAR},
+      open_time = #{openTime,jdbcType=INTEGER},
+      close_time = #{closeTime,jdbcType=INTEGER},
+      close_reason = #{closeReason,jdbcType=VARCHAR},
+      shop_logo = #{shopLogo,jdbcType=VARCHAR},
+      shopuser_name = #{shopuserName,jdbcType=VARCHAR},
+      qq = #{qq,jdbcType=VARCHAR},
+      wangwang = #{wangwang,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      shopuser_identity = #{shopuserIdentity,jdbcType=CHAR},
+      shopuser_identity_img = #{shopuserIdentityImg,jdbcType=VARCHAR},
+      shop_area = #{shopArea,jdbcType=VARCHAR},
+      bulletin = #{bulletin,jdbcType=VARCHAR},
+      check_goods = #{checkGoods,jdbcType=INTEGER}
+    where shop_id = #{shopId,jdbcType=INTEGER}
+  </update>
+</mapper>

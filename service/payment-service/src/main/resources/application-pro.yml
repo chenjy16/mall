@@ -1,0 +1,31 @@
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://10.45.178.109:3306/membersystem1128?characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&allowMultiQueries=true
+    username : root
+    password : meidui@2016.?!
+    connectionTimeout : 30000
+    idleTimeout : 600000
+    maxLifetime : 1800000
+    maximumPoolSize : 300
+    minimumIdle : 10
+    autoCommit : true;
+    connectionTestQuery : SELECT 1
+    
+
+
+
+#注册中心
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://10.116.21.93:9001/eureka/
+    registry-fetch-interval-seconds: 10  
+  healthcheck:
+      enabled: true  
+  instance:
+    hostname: 10.116.21.93
+    lease-renewal-interval-in-seconds: 15      # 心跳时间，即服务续约间隔时间（缺省为30s）
+    lease-expiration-duration-in-seconds: 30  # 发呆时间，即服务续约到期时间（缺省为90s）   
+

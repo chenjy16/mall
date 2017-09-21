@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="SysuserUserMapper" >
+  <resultMap id="BaseResultMap" type="com.meiduimall.service.catalog.entity.SysuserUser" >
+    <id column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="grade_id" property="gradeId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="point" property="point" jdbcType="INTEGER" />
+    <result column="money" property="money" jdbcType="DECIMAL" />
+    <result column="coupon" property="coupon" jdbcType="VARCHAR" />
+    <result column="pay_percent" property="payPercent" jdbcType="VARCHAR" />
+    <result column="refer_id" property="referId" jdbcType="VARCHAR" />
+    <result column="refer_url" property="referUrl" jdbcType="VARCHAR" />
+    <result column="birthday" property="birthday" jdbcType="INTEGER" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="wedlock" property="wedlock" jdbcType="INTEGER" />
+    <result column="education" property="education" jdbcType="VARCHAR" />
+    <result column="vocation" property="vocation" jdbcType="VARCHAR" />
+    <result column="reg_ip" property="regIp" jdbcType="VARCHAR" />
+    <result column="regtime" property="regtime" jdbcType="INTEGER" />
+    <result column="cur" property="cur" jdbcType="VARCHAR" />
+    <result column="lang" property="lang" jdbcType="VARCHAR" />
+    <result column="disabled" property="disabled" jdbcType="INTEGER" />
+    <result column="experience" property="experience" jdbcType="INTEGER" />
+    <result column="source" property="source" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="addr" property="addr" jdbcType="VARCHAR" />
+    <result column="email_verify" property="emailVerify" jdbcType="INTEGER" />
+    <result column="frozen_money" property="frozenMoney" jdbcType="DECIMAL" />
+    <result column="m_point" property="mPoint" jdbcType="DECIMAL" />
+    <result column="m_frozen_point" property="mFrozenPoint" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  
+  <sql id="Base_Column_List" >
+    user_id, grade_id, name, username, point, money, coupon, pay_percent, refer_id, refer_url, 
+    birthday, sex, wedlock, education, vocation, reg_ip, regtime, cur, lang, disabled, 
+    experience, source, area, addr, email_verify, frozen_money, m_point, m_frozen_point
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    * 
+    from sysuser_user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from sysuser_user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.meiduimall.service.catalog.entity.SysuserUser" >
+    insert into sysuser_user (user_id, grade_id, name, 
+      username, point, money, 
+      coupon, pay_percent, refer_id, 
+      refer_url, birthday, sex, 
+      wedlock, education, vocation, 
+      reg_ip, regtime, cur, 
+      lang, disabled, experience, 
+      source, area, addr, 
+      email_verify, frozen_money, m_point, 
+      m_frozen_point)
+    values (#{userId,jdbcType=INTEGER}, #{gradeId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{username,jdbcType=VARCHAR}, #{point,jdbcType=INTEGER}, #{money,jdbcType=DECIMAL}, 
+      #{coupon,jdbcType=VARCHAR}, #{payPercent,jdbcType=VARCHAR}, #{referId,jdbcType=VARCHAR}, 
+      #{referUrl,jdbcType=VARCHAR}, #{birthday,jdbcType=INTEGER}, #{sex,jdbcType=VARCHAR}, 
+      #{wedlock,jdbcType=INTEGER}, #{education,jdbcType=VARCHAR}, #{vocation,jdbcType=VARCHAR}, 
+      #{regIp,jdbcType=VARCHAR}, #{regtime,jdbcType=INTEGER}, #{cur,jdbcType=VARCHAR}, 
+      #{lang,jdbcType=VARCHAR}, #{disabled,jdbcType=INTEGER}, #{experience,jdbcType=INTEGER}, 
+      #{source,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, #{addr,jdbcType=VARCHAR}, 
+      #{emailVerify,jdbcType=INTEGER}, #{frozenMoney,jdbcType=DECIMAL}, #{mPoint,jdbcType=DECIMAL}, 
+      #{mFrozenPoint,jdbcType=DECIMAL})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.meiduimall.service.catalog.entity.SysuserUser" >
+    insert into sysuser_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="gradeId != null" >
+        grade_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="point != null" >
+        point,
+      </if>
+      <if test="money != null" >
+        money,
+      </if>
+      <if test="coupon != null" >
+        coupon,
+      </if>
+      <if test="payPercent != null" >
+        pay_percent,
+      </if>
+      <if test="referId != null" >
+        refer_id,
+      </if>
+      <if test="referUrl != null" >
+        refer_url,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="wedlock != null" >
+        wedlock,
+      </if>
+      <if test="education != null" >
+        education,
+      </if>
+      <if test="vocation != null" >
+        vocation,
+      </if>
+      <if test="regIp != null" >
+        reg_ip,
+      </if>
+      <if test="regtime != null" >
+        regtime,
+      </if>
+      <if test="cur != null" >
+        cur,
+      </if>
+      <if test="lang != null" >
+        lang,
+      </if>
+      <if test="disabled != null" >
+        disabled,
+      </if>
+      <if test="experience != null" >
+        experience,
+      </if>
+      <if test="source != null" >
+        source,
+      </if>
+      <if test="area != null" >
+        area,
+      </if>
+      <if test="addr != null" >
+        addr,
+      </if>
+      <if test="emailVerify != null" >
+        email_verify,
+      </if>
+      <if test="frozenMoney != null" >
+        frozen_money,
+      </if>
+      <if test="mPoint != null" >
+        m_point,
+      </if>
+      <if test="mFrozenPoint != null" >
+        m_frozen_point,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="gradeId != null" >
+        #{gradeId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="point != null" >
+        #{point,jdbcType=INTEGER},
+      </if>
+      <if test="money != null" >
+        #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="coupon != null" >
+        #{coupon,jdbcType=VARCHAR},
+      </if>
+      <if test="payPercent != null" >
+        #{payPercent,jdbcType=VARCHAR},
+      </if>
+      <if test="referId != null" >
+        #{referId,jdbcType=VARCHAR},
+      </if>
+      <if test="referUrl != null" >
+        #{referUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=INTEGER},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="wedlock != null" >
+        #{wedlock,jdbcType=INTEGER},
+      </if>
+      <if test="education != null" >
+        #{education,jdbcType=VARCHAR},
+      </if>
+      <if test="vocation != null" >
+        #{vocation,jdbcType=VARCHAR},
+      </if>
+      <if test="regIp != null" >
+        #{regIp,jdbcType=VARCHAR},
+      </if>
+      <if test="regtime != null" >
+        #{regtime,jdbcType=INTEGER},
+      </if>
+      <if test="cur != null" >
+        #{cur,jdbcType=VARCHAR},
+      </if>
+      <if test="lang != null" >
+        #{lang,jdbcType=VARCHAR},
+      </if>
+      <if test="disabled != null" >
+        #{disabled,jdbcType=INTEGER},
+      </if>
+      <if test="experience != null" >
+        #{experience,jdbcType=INTEGER},
+      </if>
+      <if test="source != null" >
+        #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null" >
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="addr != null" >
+        #{addr,jdbcType=VARCHAR},
+      </if>
+      <if test="emailVerify != null" >
+        #{emailVerify,jdbcType=INTEGER},
+      </if>
+      <if test="frozenMoney != null" >
+        #{frozenMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="mPoint != null" >
+        #{mPoint,jdbcType=DECIMAL},
+      </if>
+      <if test="mFrozenPoint != null" >
+        #{mFrozenPoint,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.meiduimall.service.catalog.entity.SysuserUser" >
+    update sysuser_user
+    <set >
+      <if test="gradeId != null" >
+        grade_id = #{gradeId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="point != null" >
+        point = #{point,jdbcType=INTEGER},
+      </if>
+      <if test="money != null" >
+        money = #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="coupon != null" >
+        coupon = #{coupon,jdbcType=VARCHAR},
+      </if>
+      <if test="payPercent != null" >
+        pay_percent = #{payPercent,jdbcType=VARCHAR},
+      </if>
+      <if test="referId != null" >
+        refer_id = #{referId,jdbcType=VARCHAR},
+      </if>
+      <if test="referUrl != null" >
+        refer_url = #{referUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=INTEGER},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="wedlock != null" >
+        wedlock = #{wedlock,jdbcType=INTEGER},
+      </if>
+      <if test="education != null" >
+        education = #{education,jdbcType=VARCHAR},
+      </if>
+      <if test="vocation != null" >
+        vocation = #{vocation,jdbcType=VARCHAR},
+      </if>
+      <if test="regIp != null" >
+        reg_ip = #{regIp,jdbcType=VARCHAR},
+      </if>
+      <if test="regtime != null" >
+        regtime = #{regtime,jdbcType=INTEGER},
+      </if>
+      <if test="cur != null" >
+        cur = #{cur,jdbcType=VARCHAR},
+      </if>
+      <if test="lang != null" >
+        lang = #{lang,jdbcType=VARCHAR},
+      </if>
+      <if test="disabled != null" >
+        disabled = #{disabled,jdbcType=INTEGER},
+      </if>
+      <if test="experience != null" >
+        experience = #{experience,jdbcType=INTEGER},
+      </if>
+      <if test="source != null" >
+        source = #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null" >
+        area = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="addr != null" >
+        addr = #{addr,jdbcType=VARCHAR},
+      </if>
+      <if test="emailVerify != null" >
+        email_verify = #{emailVerify,jdbcType=INTEGER},
+      </if>
+      <if test="frozenMoney != null" >
+        frozen_money = #{frozenMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="mPoint != null" >
+        m_point = #{mPoint,jdbcType=DECIMAL},
+      </if>
+      <if test="mFrozenPoint != null" >
+        m_frozen_point = #{mFrozenPoint,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.meiduimall.service.catalog.entity.SysuserUser" >
+    update sysuser_user
+    set grade_id = #{gradeId,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      username = #{username,jdbcType=VARCHAR},
+      point = #{point,jdbcType=INTEGER},
+      money = #{money,jdbcType=DECIMAL},
+      coupon = #{coupon,jdbcType=VARCHAR},
+      pay_percent = #{payPercent,jdbcType=VARCHAR},
+      refer_id = #{referId,jdbcType=VARCHAR},
+      refer_url = #{referUrl,jdbcType=VARCHAR},
+      birthday = #{birthday,jdbcType=INTEGER},
+      sex = #{sex,jdbcType=VARCHAR},
+      wedlock = #{wedlock,jdbcType=INTEGER},
+      education = #{education,jdbcType=VARCHAR},
+      vocation = #{vocation,jdbcType=VARCHAR},
+      reg_ip = #{regIp,jdbcType=VARCHAR},
+      regtime = #{regtime,jdbcType=INTEGER},
+      cur = #{cur,jdbcType=VARCHAR},
+      lang = #{lang,jdbcType=VARCHAR},
+      disabled = #{disabled,jdbcType=INTEGER},
+      experience = #{experience,jdbcType=INTEGER},
+      source = #{source,jdbcType=VARCHAR},
+      area = #{area,jdbcType=VARCHAR},
+      addr = #{addr,jdbcType=VARCHAR},
+      email_verify = #{emailVerify,jdbcType=INTEGER},
+      frozen_money = #{frozenMoney,jdbcType=DECIMAL},
+      m_point = #{mPoint,jdbcType=DECIMAL},
+      m_frozen_point = #{mFrozenPoint,jdbcType=DECIMAL}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+</mapper>

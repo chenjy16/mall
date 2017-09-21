@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ * @项目名称: ${project_name}
+  ~ *
+  ~ * @文件名称: ${file_name}
+  ~ * @Date: ${date}
+  ~ * @Copyright: ${year} www.meiduimall.com Inc. All rights reserved.
+  ~ *
+  ~ * 注意：本内容仅限于美兑壹购物公司内部传阅，禁止外泄以及用于其他的商业目的
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.meiduimall.service.sms.mapper.SmsSendHistoryMapper" >
+  <resultMap id="BaseResultMap" type="com.meiduimall.service.sms.entity.SendSmsHistory" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
+    <result column="template_key" property="templateKey" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="request_params" property="requestParams" jdbcType="VARCHAR" />
+    <result column="result_msg" property="resultMsg" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="creater" property="creater" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, channel_id, template_key, phone, request_params, result_msg, remark, 
+    creater, create_date
+  </sql>
+   
+  <insert id="insert" parameterType="com.meiduimall.service.sms.entity.SendSmsHistory" >
+    insert into msg_send_sms_history (id, channel_id, 
+      template_key, phone, request_params, 
+      result_msg, remark, creater, 
+      create_date)
+    values (#{id,jdbcType=VARCHAR}, #{channelId,jdbcType=VARCHAR}, 
+      #{templateKey,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{requestParams,jdbcType=VARCHAR}, 
+      #{resultMsg,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{creater,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.meiduimall.service.sms.entity.SendSmsHistory" >
+    insert into msg_send_sms_history
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="channelId != null" >
+        channel_id,
+      </if>
+      <if test="templateKey != null" >
+        template_key,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="requestParams != null" >
+        request_params,
+      </if>
+      <if test="resultMsg != null" >
+        result_msg,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="creater != null" >
+        creater,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="channelId != null" >
+        #{channelId,jdbcType=VARCHAR},
+      </if>
+      <if test="templateKey != null" >
+        #{templateKey,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="requestParams != null" >
+        #{requestParams,jdbcType=VARCHAR},
+      </if>
+      <if test="resultMsg != null" >
+        #{resultMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="creater != null" >
+        #{creater,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+</mapper>

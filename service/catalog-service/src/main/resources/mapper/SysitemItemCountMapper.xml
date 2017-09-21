@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="SysitemItemCountMapper" >
+  <resultMap id="BaseResultMap" type="com.meiduimall.service.catalog.entity.SysitemItemCount" >
+    <id column="item_id" property="itemId" jdbcType="INTEGER" />
+    <result column="sold_quantity" property="soldQuantity" jdbcType="INTEGER" />
+    <result column="rate_count" property="rateCount" jdbcType="INTEGER" />
+    <result column="rate_good_count" property="rateGoodCount" jdbcType="INTEGER" />
+    <result column="rate_neutral_count" property="rateNeutralCount" jdbcType="INTEGER" />
+    <result column="rate_bad_count" property="rateBadCount" jdbcType="INTEGER" />
+    <result column="view_count" property="viewCount" jdbcType="INTEGER" />
+    <result column="buy_count" property="buyCount" jdbcType="INTEGER" />
+    <result column="vitural_quantity" property="vituralQuantity" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  
+  <sql id="Base_Column_List" >
+    item_id, sold_quantity, rate_count, rate_good_count, rate_neutral_count, rate_bad_count, 
+    view_count, buy_count, vitural_quantity
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    * 
+    from sysitem_item_count
+    where item_id = #{itemId,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from sysitem_item_count
+    where item_id = #{itemId,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.meiduimall.service.catalog.entity.SysitemItemCount" >
+    insert into sysitem_item_count (item_id, sold_quantity, rate_count, 
+      rate_good_count, rate_neutral_count, rate_bad_count, 
+      view_count, buy_count, vitural_quantity
+      )
+    values (#{itemId,jdbcType=INTEGER}, #{soldQuantity,jdbcType=INTEGER}, #{rateCount,jdbcType=INTEGER}, 
+      #{rateGoodCount,jdbcType=INTEGER}, #{rateNeutralCount,jdbcType=INTEGER}, #{rateBadCount,jdbcType=INTEGER}, 
+      #{viewCount,jdbcType=INTEGER}, #{buyCount,jdbcType=INTEGER}, #{vituralQuantity,jdbcType=INTEGER}
+      )
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.meiduimall.service.catalog.entity.SysitemItemCount" >
+    insert into sysitem_item_count
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="itemId != null" >
+        item_id,
+      </if>
+      <if test="soldQuantity != null" >
+        sold_quantity,
+      </if>
+      <if test="rateCount != null" >
+        rate_count,
+      </if>
+      <if test="rateGoodCount != null" >
+        rate_good_count,
+      </if>
+      <if test="rateNeutralCount != null" >
+        rate_neutral_count,
+      </if>
+      <if test="rateBadCount != null" >
+        rate_bad_count,
+      </if>
+      <if test="viewCount != null" >
+        view_count,
+      </if>
+      <if test="buyCount != null" >
+        buy_count,
+      </if>
+      <if test="vituralQuantity != null" >
+        vitural_quantity,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="itemId != null" >
+        #{itemId,jdbcType=INTEGER},
+      </if>
+      <if test="soldQuantity != null" >
+        #{soldQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="rateCount != null" >
+        #{rateCount,jdbcType=INTEGER},
+      </if>
+      <if test="rateGoodCount != null" >
+        #{rateGoodCount,jdbcType=INTEGER},
+      </if>
+      <if test="rateNeutralCount != null" >
+        #{rateNeutralCount,jdbcType=INTEGER},
+      </if>
+      <if test="rateBadCount != null" >
+        #{rateBadCount,jdbcType=INTEGER},
+      </if>
+      <if test="viewCount != null" >
+        #{viewCount,jdbcType=INTEGER},
+      </if>
+      <if test="buyCount != null" >
+        #{buyCount,jdbcType=INTEGER},
+      </if>
+      <if test="vituralQuantity != null" >
+        #{vituralQuantity,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.meiduimall.service.catalog.entity.SysitemItemCount" >
+    update sysitem_item_count
+    <set >
+      <if test="soldQuantity != null" >
+        sold_quantity = #{soldQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="rateCount != null" >
+        rate_count = #{rateCount,jdbcType=INTEGER},
+      </if>
+      <if test="rateGoodCount != null" >
+        rate_good_count = #{rateGoodCount,jdbcType=INTEGER},
+      </if>
+      <if test="rateNeutralCount != null" >
+        rate_neutral_count = #{rateNeutralCount,jdbcType=INTEGER},
+      </if>
+      <if test="rateBadCount != null" >
+        rate_bad_count = #{rateBadCount,jdbcType=INTEGER},
+      </if>
+      <if test="viewCount != null" >
+        view_count = #{viewCount,jdbcType=INTEGER},
+      </if>
+      <if test="buyCount != null" >
+        buy_count = #{buyCount,jdbcType=INTEGER},
+      </if>
+      <if test="vituralQuantity != null" >
+        vitural_quantity = #{vituralQuantity,jdbcType=INTEGER},
+      </if>
+    </set>
+    where item_id = #{itemId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.meiduimall.service.catalog.entity.SysitemItemCount" >
+    update sysitem_item_count
+    set sold_quantity = #{soldQuantity,jdbcType=INTEGER},
+      rate_count = #{rateCount,jdbcType=INTEGER},
+      rate_good_count = #{rateGoodCount,jdbcType=INTEGER},
+      rate_neutral_count = #{rateNeutralCount,jdbcType=INTEGER},
+      rate_bad_count = #{rateBadCount,jdbcType=INTEGER},
+      view_count = #{viewCount,jdbcType=INTEGER},
+      buy_count = #{buyCount,jdbcType=INTEGER},
+      vitural_quantity = #{vituralQuantity,jdbcType=INTEGER}
+    where item_id = #{itemId,jdbcType=INTEGER}
+  </update>
+</mapper>

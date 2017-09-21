@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="paymentLogs">
+
+    <!-- 添加日志 -->
+    <insert id="insert" parameterType="com.meiduimall.payment.api.model.api.PaymentLogsModel">
+
+        INSERT INTO t_payment_logs
+
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="tradeNo != null">
+                trade_no,
+            </if>
+            <if test="payChannel != null">
+                pay_channel,
+            </if>
+            <if test="payType != null">
+                pay_type,
+            </if>
+            <if test="payTotal != null">
+                pay_total,
+            </if>
+            <if test="payData != null">
+                pay_data,
+            </if>
+            <if test="orderId != null">
+                order_id,
+            </if>
+            <if test="paymentId != null">
+                payment_id,
+            </if>
+            <if test="payTime != null">
+                pay_time,
+            </if>
+            <if test="payStatus != null">
+                pay_status
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="createTime != null">
+                #{createTime, jdbcType=TIMESTAMP},
+            </if>
+            <if test="tradeNo != null">
+                #{tradeNo, jdbcType=VARCHAR},
+            </if>
+            <if test="payChannel != null">
+                #{payChannel, jdbcType=INTEGER},
+            </if>
+            <if test="payType != null">
+                #{payType, jdbcType=INTEGER},
+            </if>
+            <if test="payTotal != null">
+                #{payTotal, jdbcType=DECIMAL},
+            </if>
+            <if test="payData != null">
+                #{payData, jdbcType=LONGVARCHAR},
+            </if>
+            <if test="orderId != null">
+                #{orderId, jdbcType=VARCHAR},
+            </if>
+            <if test="paymentId != null">
+                #{paymentId, jdbcType=VARCHAR},
+            </if>
+            <if test="payTime != null">
+                #{payTime, jdbcType=TIMESTAMP},
+            </if>
+            <if test="payStatus != null">
+                #{payStatus, jdbcType=INTEGER}
+            </if>
+        </trim>
+
+    </insert>
+    
+    <insert id="addlog"  parameterType="com.meiduimall.payment.api.model.api.PaymentResultModel">
+        insert into t_payment_logs (trade_no,pay_channel,pay_type,pay_total,pay_data,order_id,payment_id,pay_status,pay_time,create_time)
+        select trade_no,pay_channel,pay_type,pay_total,pay_data,order_id,#{paymentNo},#{payStatus},#{payTime},#{createTime} from t_payment_logs where order_id=#{orderNo} limit 1
+    </insert>
+
+</mapper>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--平台人员信息表ms_platforms相关操作 -->
+<mapper namespace="MSPlatFormsMapper">
+
+<!--根据手机号，登录名，邮箱查询是否存在记录 -->
+	<select id="getPfRecordByUserId"  parameterType="java.lang.String">
+	select a.`pf_id` from ms_platforms a where a.`pf_login_name`=#{userid} OR a.`pf_email`=#{userid} OR a.`pf_phone`=#{userid}
+	</select>
+	
+</mapper>

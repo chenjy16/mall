@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ShareProfitMapper">
+
+	<resultMap id="shareProfitResultMap" type="EcmMzfShareProfit">
+	  	<id property="orderSn" column="order_sn" />
+	  	<result property="outTradeSn" column="out_trade_sn"/>
+		<result property="status" column="status"/>
+		<result property="sellerId" column="seller_name"/>
+		<result property="sellerPhone" column="seller_phone"/>
+		<result property="sellerPoint" column="seller_point"/>
+		<result property="sellerProfit" column="seller_profit"/>
+		<result property="personAgentId" column="person_agent_id"/>
+		<result property="personAgentProfit" column="person_agent_profit"/>
+		<result property="areaAgentId" column="area_agent_id"/>
+		<result property="areaAgentProfit" column="area_agent_profit"/>
+		<result property="outareaAgentId" column="outarea_agent_id"/>
+		<result property="outareaAgentProfit" column="outarea_agent_profit"/>
+		<result property="phone" column="phone"/>
+		<result property="belongOnePhone" column="belong_one_phone"/>
+		<result property="belongTwoPhone" column="belong_two_phone"/>
+		<result property="orderFee" column="order_fee"/>
+		<result property="point" column="point"/>
+		<result property="belongOnePoint" column="belong_one_point"/>
+		<result property="belongTwoPoint" column="belong_two_point"/>
+		<result property="firstReferrerCash" column="first_referrer_cash"/>
+		<result property="firstReferrerCashRate" column="first_referrer_cash_rate"/>
+		<result property="outArea" column="outarea"/>
+		<result property="sellerPointRate" column="seller_point_rate"/>
+		<result property="sellerShareprofitRate" column="seller_shareprofit_rate"/>
+		<result property="personShareprofitRate" column="person_shareprofit_rate"/>
+		<result property="areaShareprofitRate" column="area_shareprofit_rate"/>
+		<result property="outareaShareprofitRate" column="outarea_shareprofit_rate"/>
+		<result property="shareStatus" column="share_status"/>
+		<result property="billStatus" column="bill_status"/>
+		<result property="scoreStatus" column="score_status"/>
+		<result property="cashStatus" column="cash_status"/>
+		<result property="statusDesc" column="status_desc"/>
+		<result property="rebateAmount" column="rebate_amount"/>
+		<result property="serviceFee" column="service_fee"/>
+	</resultMap>
+	
+	
+	<!-- 分润日志  keep-->
+	<insert id="shareProfit" parameterType="EcmMzfShareProfit" >
+		INSERT INTO ecm_mzf_shareprofit (
+			order_sn,out_trade_sn,seller_name,seller_point,seller_phone,seller_profit,person_agent_id,person_agent_profit,
+			area_agent_id,area_agent_profit,outarea_agent_id,outarea_agent_profit,phone,belong_one_phone,belong_two_phone,order_fee,source,POINT,belong_one_point,
+			belong_two_point,outarea,seller_point_rate,seller_shareprofit_rate,person_shareprofit_rate,area_shareprofit_rate,outarea_shareprofit_rate,first_referrer_cash,
+			first_referrer_cash_rate,created_date,rebate_amount,service_fee
+		) VALUES (
+			#{orderSn}, #{outTradeSn}, #{sellerId}, #{sellerPoint}, #{sellerPhone}, #{sellerProfit}, #{personAgentId}, #{personAgentProfit},
+			#{areaAgentId}, #{areaAgentProfit}, #{outareaAgentId}, #{outareaAgentProfit}, #{phone}, #{belongOnePhone}, #{belongTwoPhone}, #{orderFee}, #{source}, #{point}, #{belongOnePoint}, 
+			#{belongTwoPoint}, #{outArea}, #{sellerPointRate}, #{sellerShareprofitRate}, #{personShareprofitRate}, #{areaShareprofitRate}, #{outareaShareprofitRate},#{firstReferrerCash},
+			#{firstReferrerCashRate}, #{createdDate}, #{rebateAmount}, #{serviceFee}
+		)
+	</insert>
+	
+	<!-- 查询分润比例 -->
+	<select id="quertSharefit" resultType="EcmSystemSetting">
+		SELECT t.sid, t.scode, t.value, t.state, t.desc FROM ecm_system_setting t
+		WHERE 1=1 AND t.state = 1
+	</select>
+	
+	<!-- 查询未更新推荐人金额的数据:订单状态已结算,推荐人金额状态还没更新到会员系统,推荐人金额大于0 keep -->
+	<select id="getUpdateCashList" resultType="EcmMzfShareProfit">
+		SELECT t.order_sn AS orderSn,o.add_time AS orderDate,t.`first_referrer_cash` AS firstReferrerCash,t.belong_one_phone AS belongOnePhone 
+		FROM ecm_mzf_shareprofit t INNER JOIN ecm_mzf_order_status o 
+		WHERE t.`order_sn`=o.`order_sn` AND o.`bill_status`=3 AND o.cash_status = '0' AND t.`first_referrer_cash`>0
+	</select>
+	
+	<select id="getShareProfitByOrderSns" resultMap="shareProfitResultMap">
+		SELECT sf.*,os.`share_status`,os.`bill_status`,os.`score_status`,os.`cash_status`,os.`status_desc` 
+		FROM `ecm_mzf_shareprofit` sf,ecm_mzf_order_status os 
+		WHERE sf.`order_sn`=os.`order_sn` AND sf.`order_sn` IN
+	 	<foreach item="orderSn" index="index" collection="orderSns" open="(" separator="," close=")">  
+			  #{orderSn}  
+		</foreach>
+	</select> 
+	
+	<select id="getShareProfit2SendScoreByOrderSn" resultMap="shareProfitResultMap">
+		SELECT sf.*,os.`share_status`,os.`bill_status`,os.`score_status`,os.`cash_status`,os.`status_desc` 
+		FROM `ecm_mzf_shareprofit` sf,ecm_mzf_order_status os 
+		WHERE sf.`order_sn`=os.`order_sn` AND os.`score_status`=0 and sf.`order_sn`=#{orderSn};
+	</select>
+	
+	<select id="getBillDateByOrderSns" resultType="com.meiduimall.service.settlement.vo.EcmMzfBillWaterVO">
+		SELECT DISTINCT wo.`order_sn` AS orderSn,DATE_FORMAT(bw.`add_date`,'%Y-%m-%d') AS `billAddDate`,DATE_FORMAT(bw.`bill_date`,'%Y-%m-%d') AS `billDate` 
+		FROM `ecm_mzf_bill_water_order` wo INNER JOIN `ecm_mzf_bill_water` bw ON wo.`bill_id`=bw.`bill_id` WHERE wo.`order_sn` IN 
+	 	<foreach item="orderSn" index="index" collection="orderSns" open="(" separator="," close=")">  
+		  #{orderSn}  
+		</foreach>
+	</select>
+	
+	<!-- 一个区代即可能是区代也可能是跨区代 -->
+	<select id="getAreaAgentShareProfit4Period" resultType="com.meiduimall.service.settlement.vo.ShareProfitVO">
+ 		  SELECT 'areaAgent' as `type`, IFNULL(SUM(f.`area_agent_profit`),0) as profitToday FROM ecm_mzf_shareprofit f INNER JOIN ecm_mzf_order_status o ON o.`order_sn`=f.`order_sn` WHERE f.`area_agent_id` =#{areaAgentNo} AND o.`bill_status`=0 AND (o.`add_time` &gt;#{startDate} AND o.`add_time` &lt;=#{endDate})
+		  union all
+		  SELECT 'outAreaAgent' as `type`, IFNULL(SUM(f.`outarea_agent_profit`),0) as profitToday FROM ecm_mzf_shareprofit f INNER JOIN ecm_mzf_order_status o ON o.`order_sn`=f.`order_sn` WHERE f.`outarea_agent_id`=#{areaAgentNo} AND o.`bill_status`=0 AND (o.`add_time` &gt;#{startDate} AND o.`add_time` &lt;=#{endDate})
+	</select>
+	
+	<select id="getAreaAgentShareProfit4Settlement" resultType="com.meiduimall.service.settlement.vo.ShareProfitVO">
+	   SELECT 'areaAgent' as `type`, IFNULL(SUM(f.`area_agent_profit`),0) as profit4Settlement FROM ecm_mzf_shareprofit f INNER JOIN ecm_mzf_order_status o ON o.`order_sn`=f.`order_sn` WHERE f.`area_agent_id`=#{areaAgentNo} AND o.`bill_status`=1
+	   union all
+	   SELECT 'outAreaAgent' as `type`, IFNULL(SUM(f.`outarea_agent_profit`),0) as profit4Settlement FROM ecm_mzf_shareprofit f INNER JOIN ecm_mzf_order_status o ON o.`order_sn`=f.`order_sn` WHERE f.`outarea_agent_id`=#{areaAgentNo} AND o.`bill_status`=1
+	</select>
+
+	<select id="getPersonalAgentShareProfit4Period" resultType="com.meiduimall.service.settlement.vo.ShareProfitVO">
+		SELECT 'personalAgent' as `type`, IFNULL(SUM(f.`person_agent_profit`),0) as profitToday FROM ecm_mzf_shareprofit f INNER JOIN ecm_mzf_order_status o ON o.`order_sn`=f.`order_sn` WHERE f.`person_agent_id`=#{personalAgentNo} AND o.`bill_status`=0 AND (o.`add_time` &gt;#{startDate} AND o.`add_time` &lt;=#{endDate})
+	</select>
+	
+	<select id="getPersonalAgentShareProfit4Settlement" resultType="com.meiduimall.service.settlement.vo.ShareProfitVO">
+		SELECT 'personalAgent' as `type`, IFNULL(SUM(f.`person_agent_profit`),0) As profit4Settlement FROM ecm_mzf_shareprofit f INNER JOIN ecm_mzf_order_status o ON o.`order_sn`=f.`order_sn` WHERE f.`person_agent_id`=#{personalAgentNo} AND o.`bill_status`=1
+	</select>
+	
+	<select id="checkShareProfitExisted" resultType="java.lang.Integer">
+		SELECT COUNT(sf.`order_sn`) AS cnt FROM ecm_mzf_shareprofit sf WHERE sf.`order_sn`=#{orderSn};
+	</select>
+
+</mapper>

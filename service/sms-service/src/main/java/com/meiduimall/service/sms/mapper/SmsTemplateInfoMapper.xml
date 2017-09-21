@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ * @项目名称: ${project_name}
+  ~ *
+  ~ * @文件名称: ${file_name}
+  ~ * @Date: ${date}
+  ~ * @Copyright: ${year} www.meiduimall.com Inc. All rights reserved.
+  ~ *
+  ~ * 注意：本内容仅限于美兑壹购物公司内部传阅，禁止外泄以及用于其他的商业目的
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.meiduimall.service.sms.mapper.SmsTemplateInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.meiduimall.service.sms.entity.TemplateInfo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
+    <result column="template_key" property="templateKey" jdbcType="VARCHAR" />
+    <result column="external_template_no" property="externalTemplateNo" jdbcType="VARCHAR" />
+    <result column="template_name" property="templateName" jdbcType="VARCHAR" />
+    <result column="template_content" property="templateContent" jdbcType="VARCHAR" />
+    <result column="group_key" property="groupKey" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="creater" property="creater" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="effective_time" property="effectiveTime" jdbcType="VARCHAR" />
+  </resultMap>
+ 
+  <sql id="Base_Column_List" >
+    id, channel_id, template_key, external_template_no, template_name, template_content, 
+    group_key, remark, creater, create_date, effective_time
+  </sql>
+ 
+  <insert id="insert" parameterType="com.meiduimall.service.sms.entity.TemplateInfo" >
+    insert into msg_template_info (id, channel_id, template_key, 
+      external_template_no, template_name, template_content, 
+      group_key, remark, creater, 
+      create_date, effective_time)
+    values (#{id,jdbcType=VARCHAR}, #{channelId,jdbcType=VARCHAR}, #{templateKey,jdbcType=VARCHAR}, 
+      #{externalTemplateNo,jdbcType=VARCHAR}, #{templateName,jdbcType=VARCHAR}, #{templateContent,jdbcType=VARCHAR}, 
+      #{groupKey,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{creater,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{effectiveTime,jdbcType=VARCHAR})
+  </insert>
+   
+   <select id="getTemplateInfoList" resultMap="BaseResultMap">
+   select 
+    <include refid="Base_Column_List"/>
+    from msg_template_info
+  </select>
+  
+</mapper>
